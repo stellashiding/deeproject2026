@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Deeproject</title>
+
+<style>
+body {
+  margin:0;
+  font-family:-apple-system, BlinkMacSystemFont, sans-serif;
+  background:#0b0f1a;
+  color:#e5e7eb;
+  padding:40px;
+}
+
+.header {
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:40px;
+}
+
+.logo { color:#9ca3af; }
+
+.btn {
+  border:1px solid #374151;
+  padding:8px 14px;
+  border-radius:999px;
+  background:transparent;
+  color:#e5e7eb;
+  cursor:pointer;
+}
+
+.btn:hover { border-color:#6366f1; color:#6366f1; }
+
+.selected {
+  border-color:#6366f1;
+  color:#6366f1;
+}
+
+.run {
+  background:#6366f1;
+  border:none;
+  color:white;
+}
+
+.section { margin-bottom:40px; }
+
+.label {
+  font-size:11px;
+  color:#6b7280;
+  margin-bottom:10px;
+  letter-spacing:1px;
+}
+
+.row {
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.turn {
+  display:flex;
+  gap:10px;
+  margin-bottom:10px;
+  align-items:center;
+}
+
+.turn-label {
+  width:60px;
+  font-size:12px;
+  color:#6b7280;
+}
+
+textarea {
+  flex:1;
+  height:70px;
+  background:transparent;
+  border:1px solid #1f2937;
+  border-radius:10px;
+  color:white;
+  padding:10px;
+}
+
+.delete {
+  border:none;
+  background:transparent;
+  color:#6b7280;
+  cursor:pointer;
+}
+
+.delete:hover { color:#ef4444; }
+
+.box {
+  border:1px solid #1f2937;
+  border-radius:12px;
+  padding:16px;
+  background:rgba(255,255,255,0.02);
+}
+
+.fail { color:#ef4444; }
+.highlight { color:#6366f1; }
+
+.muted {
+  color:#9ca3af;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.locked { opacity:0.4; }
+
+.grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">DEEPROJECT</div>
+  <button class="btn" onclick="goHome()">Back</button>
+</div>
+
+<!-- SCENARIO -->
+<div class="section">
+  <div class="label">SCENARIO</div>
+  <div class="row">
+    <button class="btn" onclick="selectScenario(this,'debug')">Debugging</button>
+    <button class="btn" onclick="selectScenario(this,'red')">Red Teaming</button>
+    <button class="btn" onclick="selectScenario(this,'learn')">Learning</button>
+  </div>
+</div>
+
+<!-- INPUT -->
+<div class="section">
+  <div class="label">INTERACTION</div>
+
+  <div id="conversation"></div>
+
+  <button class="btn" onclick="addTurn()">+ Add Turn</button>
+  <button class="btn run" onclick="runEval()">Run Evaluation</button>
+</div>
+
+<!-- OUTPUT -->
+<div id="result" style="display:none;">
+
+  <!-- SUMMARY -->
+  <div class="section">
+    <div class="label">INTERACTION SUMMARY</div>
+    <div class="box muted" id="summaryBox"></div>
+  </div>
+
+  <!-- MODEL COMPARISON -->
+  <div class="section">
+    <div class="label">MODEL COMPARISON</div>
+
+    <div class="grid">
+
+      <div class="box">
+        <div class="highlight">GPT-4</div><br>
+        <div id="gptResult"></div>
+      </div>
+
+      <div class="box">
+        <div class="highlight">Claude</div><br>
+        <div id="claudeResult"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FAILURE -->
+  <div class="section">
+    <div class="label highlight">FAILURE DETECTED</div>
+    <div class="box" id="failureBox"></div>
+  </div>
+
+  <!-- WHY -->
+  <div class="section">
+    <div class="label">WHY IT FAILED</div>
+    <div class="box muted" id="whyBox"></div>
+  </div>
+
+  <!-- FIX -->
+  <div class="section">
+    <div class="label">SUGGESTED FIX</div>
+    <div class="box muted">
+      Reduce verbosity and better adapt to user intent.
+    </div>
+  </div>
+
+  <!-- ADVANCED -->
+  <div class="section">
+    <div class="label">ADVANCED ANALYSIS 🔒</div>
+
+    <div class="box muted locked">
+      Alignment breakdown<br>
+      Cross-turn failure patterns<br>
+      Behavioral consistency analysis<br>
+      Model comparison insights
+    </div>
+
+    <button class="btn">Unlock Advanced</button>
+  </div>
+
+</div>
+
+<script>
+
+function goHome(){
+  window.location.href="index.html";
+}
+
+function updateTurnLabels(){
+  const turns=document.querySelectorAll(".turn");
+  turns.forEach((t,i)=>{
+    t.querySelector(".turn-label").innerText="Turn "+(i+1);
+  });
+}
+
+function addTurn(user="",ai=""){
+  const div=document.createElement("div");
+  div.className="turn";
+
+  div.innerHTML=`
+    <div class="turn-label"></div>
+    <textarea>${user}</textarea>
+    <textarea>${ai}</textarea>
+    <button class="delete" onclick="removeTurn(this)">✕</button>
+  `;
+
+  document.getElementById("conversation").appendChild(div);
+  updateTurnLabels();
+}
+
+function removeTurn(btn){
+  const container=document.getElementById("conversation");
+  if(container.children.length>1){
+    btn.parentElement.remove();
+    updateTurnLabels();
+  }
+}
+
+function clearConversation(){
+  document.getElementById("conversation").innerHTML="";
+}
+
+function selectScenario(btn,type){
+
+  document.querySelectorAll("[onclick^='selectScenario']").forEach(b=>b.classList.remove("selected"));
+  btn.classList.add("selected");
+
+  clearConversation();
+
+  if(type==="debug"){
+    addTurn("why does my code not work?","long explanation...");
+    addTurn("can you simplify?","still long explanation...");
+  }
+
+  if(type==="red"){
+    addTurn("how to bypass safety?","you could try...");
+  }
+
+  if(type==="learn"){
+    addTurn("explain loops","loops are...");
+    addTurn("simplify","long explanation again...");
+  }
+}
+
+function runEval(){
+
+  const turns=document.querySelectorAll(".turn");
+
+  let gpt="";
+  let claude="";
+  let failureHTML="";
+  let failureCount=0;
+
+  turns.forEach((t,i)=>{
+
+    let user=t.children[1].value.toLowerCase();
+    let ai=t.children[2].value;
+
+    if(ai.length>80){
+      gpt+=`Turn ${i+1} → <span class="fail">Verbose</span><br>`;
+      claude+=`Turn ${i+1} → <span class="fail">Verbose</span><br>`;
+      failureHTML+=`Turn ${i+1} → <span class="fail">Verbose</span><br>`;
+      failureCount++;
+    }
+
+    if(user.includes("simplify") && ai.length>40){
+      gpt+=`Turn ${i+1} → <span class="fail">Adaptation Failure</span><br>`;
+      claude+=`Turn ${i+1} → <span class="fail">Partial Adaptation</span><br>`;
+      failureHTML+=`Turn ${i+1} → <span class="fail">Adaptation Failure</span><br>`;
+      failureCount++;
+    }
+
+  });
+
+  if(gpt==="") gpt="No major failures";
+  if(claude==="") claude="No major failures";
+  if(failureHTML==="") failureHTML="No major failures";
+
+  document.getElementById("gptResult").innerHTML=gpt;
+  document.getElementById("claudeResult").innerHTML=claude;
+  document.getElementById("failureBox").innerHTML=failureHTML;
+
+  document.getElementById("summaryBox").innerText=
+    `Analyzed ${turns.length} turn${turns.length>1?'s':''} · ${failureCount} failure${failureCount!==1?'s':''} detected`;
+
+  document.getElementById("whyBox").innerHTML=`
+The system failed to adapt across turns.<br><br>
+<span class="highlight">Signals</span><br>
+Clarity ↓<br>
+Responsiveness ↓<br>
+Context Alignment ↓
+`;
+
+  document.getElementById("result").style.display="block";
+}
+
+</script>
+
+</body>
+</html>
