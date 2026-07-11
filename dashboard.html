@@ -14,22 +14,29 @@ body {
   padding: 40px;
 }
 
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 }
 
 .logo {
   color: #9ca3af;
   font-weight: 700;
   letter-spacing: 1px;
+  font-size: 18px;
 }
 
 .header-actions {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .btn {
@@ -64,6 +71,12 @@ body {
   color: white;
 }
 
+.prototype-note {
+  color: #9ca3af;
+  font-size: 13px;
+  margin-bottom: 34px;
+}
+
 .section {
   margin-bottom: 40px;
 }
@@ -93,7 +106,7 @@ body {
 .turn-label {
   font-size: 12px;
   color: #6b7280;
-  padding-top: 12px;
+  padding-top: 30px;
 }
 
 .field-wrap {
@@ -110,7 +123,7 @@ body {
 }
 
 textarea {
-  height: 118px;
+  height: 135px;
   background: transparent;
   border: 1px solid #1f2937;
   border-radius: 10px;
@@ -118,6 +131,7 @@ textarea {
   padding: 10px;
   resize: vertical;
   line-height: 1.45;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 textarea:focus {
@@ -130,8 +144,8 @@ textarea:focus {
   background: transparent;
   color: #6b7280;
   cursor: pointer;
-  padding-top: 34px;
-  font-size: 16px;
+  padding-top: 32px;
+  font-size: 18px;
 }
 
 .delete:hover {
@@ -151,6 +165,7 @@ textarea:focus {
   align-items: center;
   padding: 11px 0;
   border-bottom: 1px solid #1f2937;
+  gap: 16px;
 }
 
 .metric:last-child {
@@ -165,6 +180,7 @@ textarea:focus {
   color: #9ca3af;
   font-size: 12px;
   margin-top: 3px;
+  line-height: 1.4;
 }
 
 .status {
@@ -200,14 +216,6 @@ textarea:focus {
 
 .fail {
   color: #ef4444;
-}
-
-.warn {
-  color: #f59e0b;
-}
-
-.good {
-  color: #22c55e;
 }
 
 .highlight {
@@ -263,13 +271,6 @@ textarea:focus {
   margin-top: 14px;
 }
 
-.prototype-note {
-  color: #9ca3af;
-  font-size: 13px;
-  margin-top: -20px;
-  margin-bottom: 30px;
-}
-
 @media (max-width: 850px) {
   body {
     padding: 24px;
@@ -292,135 +293,137 @@ textarea:focus {
     align-items: flex-start;
     gap: 14px;
   }
+
+  .risk-box {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 </style>
 </head>
 
 <body>
+<div class="page">
 
-<!-- HEADER -->
-<div class="header">
-  <div class="logo">DEEPROJECT</div>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">DEEPROJECT</div>
 
-  <div class="header-actions">
-    <a class="btn" href="condensed.html">Condensed Report</a>
-    <button class="btn" onclick="exportReport()">Export Report</button>
-    <button class="btn" onclick="shareReport()">Share Report</button>
-    <button class="btn" onclick="goHome()">Back</button>
-  </div>
-</div>
-
-<div class="prototype-note">
-  Prototype report generated from a multi-turn AI interaction.
-</div>
-
-<!-- SCENARIO -->
-<div class="section">
-  <div class="label">Scenario</div>
-  <div class="row">
-    <button class="btn scenario-btn selected" onclick="selectScenario(this,'debug')">Debugging</button>
-    <button class="btn scenario-btn" onclick="selectScenario(this,'general')">General Coding</button>
-    <button class="btn scenario-btn" onclick="selectScenario(this,'learn')">Learning</button>
-  </div>
-</div>
-
-<!-- INPUT -->
-<div class="section">
-  <div class="label">Interaction</div>
-
-  <div id="conversation"></div>
-
-  <div class="row" style="margin-top:18px;">
-    <button class="btn" onclick="addTurn()">+ Add Turn</button>
-    <button class="btn run" onclick="runEval()">Run Behavioral Evaluation</button>
-  </div>
-</div>
-
-<!-- OUTPUT -->
-<div id="result" style="display:none;">
-
-  <!-- SUMMARY -->
-  <div class="section">
-    <div class="label">Interaction Summary</div>
-    <div class="box muted" id="summaryBox"></div>
-  </div>
-
-  <!-- BEHAVIOR SUMMARY -->
-  <div class="section">
-    <div class="label">Behavior Summary</div>
-
-    <div class="box">
-      <div class="metric">
-        <div>
-          <div class="metric-name">Reasoning</div>
-          <div class="metric-note">Does the AI explain why its answer or suggestion makes sense?</div>
-        </div>
-        <span class="status" id="reasoningStatus">—</span>
-      </div>
-
-      <div class="metric">
-        <div>
-          <div class="metric-name">Helpfulness</div>
-          <div class="metric-note">Does the AI provide actionable help for the user’s task?</div>
-        </div>
-        <span class="status" id="helpfulnessStatus">—</span>
-      </div>
-
-      <div class="metric">
-        <div>
-          <div class="metric-name">Consistency</div>
-          <div class="metric-note">Does the AI stay coherent across turns?</div>
-        </div>
-        <span class="status" id="consistencyStatus">—</span>
-      </div>
-
-      <div class="metric">
-        <div>
-          <div class="metric-name">Context Alignment</div>
-          <div class="metric-note">Does the AI adapt to the user’s intent, level, and follow-up?</div>
-        </div>
-        <span class="status" id="alignmentStatus">—</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- DEPLOYMENT STATUS -->
-  <div class="section">
-    <div class="label">Deployment Status</div>
-
-    <div class="box risk-box">
-      <div>
-        <div class="risk-title" id="riskTitle">Review Recommended</div>
-        <div class="risk-desc" id="riskDesc">
-          This interaction contains behavioral issues that should be reviewed before deployment.
-        </div>
-      </div>
-
-      <span class="status status-warn" id="riskBadge">Medium Risk</span>
-    </div>
-
-    <div class="report-actions">
+    <div class="header-actions">
+      <a class="btn" href="condensed.html">Condensed Report</a>
       <button class="btn" onclick="exportReport()">Export Report</button>
-      <button class="btn" onclick="shareReport()">Share with Team</button>
+      <button class="btn" onclick="shareReport()">Share Report</button>
+      <button class="btn" onclick="goHome()">Back</button>
     </div>
   </div>
 
-  <!-- EVIDENCE -->
-  <div class="section">
-    <div class="label">Evidence</div>
-    <div class="box muted" id="evidenceBox"></div>
+  <div class="prototype-note">
+    Prototype report generated from a multi-turn AI interaction.
   </div>
 
-  <!-- BEHAVIOR INSIGHTS -->
+  <!-- SCENARIO -->
   <div class="section">
-    <div class="label highlight">Behavior Insights</div>
-    <div class="box muted" id="behaviorBox"></div>
+    <div class="label">Scenario</div>
+    <div class="row">
+      <button class="btn scenario-btn selected" onclick="selectScenario(this,'debug')">Debugging</button>
+      <button class="btn scenario-btn" onclick="selectScenario(this,'general')">General Coding</button>
+      <button class="btn scenario-btn" onclick="selectScenario(this,'learn')">Learning</button>
+    </div>
   </div>
 
-  <!-- ACTIONS -->
+  <!-- INPUT -->
   <div class="section">
-    <div class="label">Recommended Actions</div>
-    <div class="box muted" id="actionsBox"></div>
+    <div class="label">Interaction</div>
+
+    <div id="conversation"></div>
+
+    <div class="row" style="margin-top:18px;">
+      <button class="btn" onclick="addTurn()">+ Add Turn</button>
+      <button class="btn run" onclick="runEval()">Run Behavioral Evaluation</button>
+    </div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div id="result" style="display:none;">
+
+    <div class="section">
+      <div class="label">Interaction Summary</div>
+      <div class="box muted" id="summaryBox"></div>
+    </div>
+
+    <div class="section">
+      <div class="label">Behavior Summary</div>
+
+      <div class="box">
+        <div class="metric">
+          <div>
+            <div class="metric-name">Reasoning</div>
+            <div class="metric-note">Does the AI explain why its answer or suggestion makes sense?</div>
+          </div>
+          <span class="status" id="reasoningStatus">—</span>
+        </div>
+
+        <div class="metric">
+          <div>
+            <div class="metric-name">Helpfulness</div>
+            <div class="metric-note">Does the AI provide actionable help for the user’s task?</div>
+          </div>
+          <span class="status" id="helpfulnessStatus">—</span>
+        </div>
+
+        <div class="metric">
+          <div>
+            <div class="metric-name">Consistency</div>
+            <div class="metric-note">Does the AI stay coherent across turns?</div>
+          </div>
+          <span class="status" id="consistencyStatus">—</span>
+        </div>
+
+        <div class="metric">
+          <div>
+            <div class="metric-name">Context Alignment</div>
+            <div class="metric-note">Does the AI adapt to the user’s intent, level, and follow-up?</div>
+          </div>
+          <span class="status" id="alignmentStatus">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="label">Deployment Status</div>
+
+      <div class="box risk-box">
+        <div>
+          <div class="risk-title" id="riskTitle">Review Recommended</div>
+          <div class="risk-desc" id="riskDesc">
+            This interaction contains behavioral issues that should be reviewed before deployment.
+          </div>
+        </div>
+
+        <span class="status status-warn" id="riskBadge">Medium Risk</span>
+      </div>
+
+      <div class="report-actions">
+        <button class="btn" onclick="exportReport()">Export Report</button>
+        <button class="btn" onclick="shareReport()">Share with Team</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="label">Evidence</div>
+      <div class="box muted" id="evidenceBox"></div>
+    </div>
+
+    <div class="section">
+      <div class="label highlight">Behavior Insights</div>
+      <div class="box muted" id="behaviorBox"></div>
+    </div>
+
+    <div class="section">
+      <div class="label">Recommended Actions</div>
+      <div class="box muted" id="actionsBox"></div>
+    </div>
+
   </div>
 
 </div>
@@ -480,7 +483,7 @@ function addTurn(user = "", ai = ""){
 
   const del = document.createElement("button");
   del.className = "delete";
-  del.innerText = "✕";
+  del.innerText = "×";
   del.onclick = function(){
     removeTurn(del);
   };
@@ -512,9 +515,9 @@ function multiline(lines){
 }
 
 function selectScenario(btn, type){
-  document
-    .querySelectorAll(".scenario-btn")
-    .forEach(b => b.classList.remove("selected"));
+  document.querySelectorAll(".scenario-btn").forEach(b => {
+    b.classList.remove("selected");
+  });
 
   btn.classList.add("selected");
 
@@ -689,7 +692,6 @@ function selectScenario(btn, type){
 function setStatus(elementId, label, level){
   const el = document.getElementById(elementId);
   el.innerText = label;
-
   el.className = "status";
 
   if(level === "good"){
@@ -733,12 +735,6 @@ function analyzeTurns(turns){
     turns.reduce((sum, t) => sum + t.ai.length, 0) / Math.max(turns.length, 1);
 
   const hasVeryLongResponses = turns.filter(t => t.ai.length > 900).length >= 2;
-  const hasErrorTurn = turns.some(t =>
-    t.userLower.includes("error") ||
-    t.userLower.includes("doesn't work") ||
-    t.userLower.includes("does not work") ||
-    t.userLower.includes("not work")
-  );
 
   const errorTurn = turns.find(t =>
     t.userLower.includes("error") ||
@@ -995,11 +991,10 @@ function runEval(){
   }, 100);
 }
 
-/* Load default scenario */
-selectScenario(
-  document.querySelector(".scenario-btn"),
-  "debug"
-);
+window.onload = function(){
+  const defaultBtn = document.querySelector(".scenario-btn");
+  selectScenario(defaultBtn, "debug");
+};
 </script>
 
 </body>
