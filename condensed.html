@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DeeProject Condensed Report</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #0b0f1a;
+  color: #e5e7eb;
+  padding: 36px;
+}
+
+.page {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.logo {
+  color: #9ca3af;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.btn {
+  border: 1px solid #374151;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: transparent;
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.btn:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+}
+
+.hero {
+  border: 1px solid #1f2937;
+  background: rgba(255,255,255,0.025);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 22px;
+}
+
+.kicker {
+  color: #6b7280;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #9ca3af;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.box {
+  border: 1px solid #1f2937;
+  border-radius: 14px;
+  padding: 18px;
+  background: rgba(255,255,255,0.02);
+}
+
+.label {
+  font-size: 11px;
+  color: #6b7280;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.metric {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid #1f2937;
+}
+
+.metric:last-child {
+  border-bottom: none;
+}
+
+.metric-name {
+  color: #e5e7eb;
+}
+
+.metric-desc {
+  color: #9ca3af;
+  font-size: 12px;
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  white-space: nowrap;
+  height: fit-content;
+}
+
+.good {
+  color: #22c55e;
+  background: rgba(34,197,94,0.12);
+  border: 1px solid rgba(34,197,94,0.25);
+}
+
+.warn {
+  color: #f59e0b;
+  background: rgba(245,158,11,0.12);
+  border: 1px solid rgba(245,158,11,0.25);
+}
+
+.bad {
+  color: #ef4444;
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.25);
+}
+
+.risk {
+  font-size: 20px;
+  font-weight: 650;
+  margin-bottom: 8px;
+}
+
+.muted {
+  color: #9ca3af;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.section {
+  margin-bottom: 22px;
+}
+
+.item {
+  padding: 12px 0;
+  border-bottom: 1px solid #1f2937;
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.turn {
+  color: #6366f1;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.issue {
+  color: #ef4444;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.action {
+  padding: 9px 0;
+  color: #d1d5db;
+}
+
+details {
+  border: 1px solid #1f2937;
+  border-radius: 14px;
+  padding: 16px;
+  background: rgba(255,255,255,0.015);
+}
+
+summary {
+  cursor: pointer;
+  color: #e5e7eb;
+  font-weight: 600;
+}
+
+.conversation {
+  margin-top: 16px;
+}
+
+.message {
+  border-top: 1px solid #1f2937;
+  padding: 14px 0;
+}
+
+.role {
+  color: #6b7280;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.text {
+  color: #d1d5db;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.footer {
+  color: #6b7280;
+  font-size: 12px;
+  margin-top: 28px;
+  text-align: center;
+}
+
+@media (max-width: 850px) {
+  body {
+    padding: 24px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="logo">DEEPROJECT</div>
+    <a class="btn" href="dashboard.html">Back to Full Dashboard</a>
+  </div>
+
+  <div class="hero">
+    <div class="kicker">Condensed Behavioral Evaluation Report</div>
+    <div class="title">Multi-turn AI Interaction Review</div>
+    <div class="subtitle">
+      This condensed report summarizes behavioral issues detected in a multi-turn AI coding interaction.
+      It is designed for quick review during AI evaluation, QA, or model improvement workflows.
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="box">
+      <div class="label">Behavior Summary</div>
+
+      <div class="metric">
+        <div>
+          <div class="metric-name">Reasoning</div>
+          <div class="metric-desc">The assistant explains the technical cause of the error.</div>
+        </div>
+        <span class="status good">Good</span>
+      </div>
+
+      <div class="metric">
+        <div>
+          <div class="metric-name">Helpfulness</div>
+          <div class="metric-desc">The answer is useful but may overload the user.</div>
+        </div>
+        <span class="status warn">Needs Review</span>
+      </div>
+
+      <div class="metric">
+        <div>
+          <div class="metric-name">Consistency</div>
+          <div class="metric-desc">The assistant remains coherent across turns.</div>
+        </div>
+        <span class="status good">Good</span>
+      </div>
+
+      <div class="metric">
+        <div>
+          <div class="metric-name">Context Alignment</div>
+          <div class="metric-desc">The assistant does not fully adapt from teaching mode to debugging mode.</div>
+        </div>
+        <span class="status warn">Needs Review</span>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="label">Deployment Status</div>
+      <div class="risk">Review Recommended</div>
+      <div class="muted">
+        This interaction contains behavioral issues that may affect user experience.
+        The response is technically informative, but it may be too verbose and insufficiently focused on the user’s immediate debugging need.
+      </div>
+      <br>
+      <span class="status warn">Medium Risk</span>
+    </div>
+
+  </div>
+
+  <div class="section box">
+    <div class="label">Key Evidence</div>
+
+    <div class="item">
+      <div class="turn">Turn 1</div>
+      <div class="muted">
+        The assistant gives a broad tutorial on lists, including indexing, append, loops, and a challenge.
+        This may be more information than needed for a simple initial question.
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="turn">Turn 2</div>
+      <div class="muted">
+        The assistant explains fitMedia with lists, but again provides a long conceptual explanation instead of quickly showing the key usage pattern.
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="turn">Turn 3</div>
+      <div class="muted">
+        The assistant correctly explains the cause of the error, but combines a quick fix, an alternative loop solution,
+        and conceptual explanation in one long response.
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="box">
+      <div class="label">Behavior Insights</div>
+
+      <div class="item">
+        <div class="issue">Overly verbose guidance</div>
+        <div class="muted">
+          The assistant provides long explanations across turns, which may increase cognitive load.
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="issue">Limited task focus</div>
+        <div class="muted">
+          The assistant answers the technical question but does not prioritize the shortest path to fixing the current error.
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="issue">Context adaptation issue</div>
+        <div class="muted">
+          The assistant does not sufficiently shift from teaching mode to debugging mode when the user reports an error.
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="label">Recommended Actions</div>
+
+      <div class="action">✓ Start with the minimal fix: use <code>sounds[0]</code> instead of <code>sounds</code>.</div>
+      <div class="action">✓ Explain the error in one sentence before giving alternatives.</div>
+      <div class="action">✓ Separate “quick fix” from “advanced option.”</div>
+      <div class="action">✓ Ask whether the user wants to use one sound or loop through all sounds.</div>
+    </div>
+
+  </div>
+
+  <div class="section">
+    <details>
+      <summary>Original Interaction</summary>
+
+      <div class="conversation">
+
+        <div class="message">
+          <div class="role">User · Turn 1</div>
+          <div class="text">How do I use a list in Python?</div>
+        </div>
+
+        <div class="message">
+          <div class="role">AI · Turn 1</div>
+          <div class="text">In the world of music programming, you can think of a list as a sequence of notes or a musical score. It’s a way to store multiple pieces of information, like note names or volumes, in a specific order. The response then explains creating lists, indexing, appending items, loops, and ends with a quick challenge.</div>
+        </div>
+
+        <div class="message">
+          <div class="role">User · Turn 2</div>
+          <div class="text">How do I use fitMedia with this sound list?</div>
+        </div>
+
+        <div class="message">
+          <div class="role">AI · Turn 2</div>
+          <div class="text">The assistant explains how to use a list with fitMedia, describes indexing, gives multiple code examples, explains why lists are useful, and suggests using loops later.</div>
+        </div>
+
+        <div class="message">
+          <div class="role">User · Turn 3</div>
+          <div class="text">This doesn't work in my code: fitMedia(sounds, 1, 1, 5). It gives an error.</div>
+        </div>
+
+        <div class="message">
+          <div class="role">AI · Turn 3</div>
+          <div class="text">The assistant explains that fitMedia expects a single sound constant, not the entire list. It then gives two possible fixes: selecting one item using sounds[0], or using a for loop to place all sounds on different tracks.</div>
+        </div>
+
+      </div>
+    </details>
+  </div>
+
+  <div class="footer">
+    DeeProject prototype · Condensed version for research interview and paper figure use.
+  </div>
+
+</div>
+</body>
+</html>
