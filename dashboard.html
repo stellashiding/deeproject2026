@@ -3,116 +3,297 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Deeproject</title>
+<title>DeeProject</title>
 
 <style>
 body {
-  margin:0;
-  font-family:-apple-system, BlinkMacSystemFont, sans-serif;
-  background:#0b0f1a;
-  color:#e5e7eb;
-  padding:40px;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #0b0f1a;
+  color: #e5e7eb;
+  padding: 40px;
 }
 
 .header {
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
 }
 
-.logo { color:#9ca3af; }
+.logo {
+  color: #9ca3af;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
 
 .btn {
-  border:1px solid #374151;
-  padding:8px 14px;
-  border-radius:999px;
-  background:transparent;
-  color:#e5e7eb;
-  cursor:pointer;
+  border: 1px solid #374151;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: transparent;
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 13px;
 }
 
-.btn:hover { border-color:#6366f1; color:#6366f1; }
+.btn:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+}
 
 .selected {
-  border-color:#6366f1;
-  color:#6366f1;
+  border-color: #6366f1;
+  color: #6366f1;
 }
 
 .run {
-  background:#6366f1;
-  border:none;
-  color:white;
+  background: #6366f1;
+  border: none;
+  color: white;
 }
 
-.section { margin-bottom:40px; }
+.run:hover {
+  background: #4f46e5;
+  color: white;
+}
+
+.section {
+  margin-bottom: 40px;
+}
 
 .label {
-  font-size:11px;
-  color:#6b7280;
-  margin-bottom:10px;
-  letter-spacing:1px;
+  font-size: 11px;
+  color: #6b7280;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .row {
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .turn {
-  display:flex;
-  gap:10px;
-  margin-bottom:10px;
-  align-items:center;
+  display: grid;
+  grid-template-columns: 70px 1fr 1fr 30px;
+  gap: 10px;
+  margin-bottom: 12px;
+  align-items: start;
 }
 
 .turn-label {
-  width:60px;
-  font-size:12px;
-  color:#6b7280;
+  font-size: 12px;
+  color: #6b7280;
+  padding-top: 12px;
+}
+
+.field-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-label {
+  font-size: 10px;
+  color: #6b7280;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 textarea {
-  flex:1;
-  height:70px;
-  background:transparent;
-  border:1px solid #1f2937;
-  border-radius:10px;
-  color:white;
-  padding:10px;
+  height: 86px;
+  background: transparent;
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  color: white;
+  padding: 10px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #6366f1;
 }
 
 .delete {
-  border:none;
-  background:transparent;
-  color:#6b7280;
-  cursor:pointer;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  padding-top: 34px;
+  font-size: 16px;
 }
 
-.delete:hover { color:#ef4444; }
+.delete:hover {
+  color: #ef4444;
+}
 
 .box {
-  border:1px solid #1f2937;
-  border-radius:12px;
-  padding:16px;
-  background:rgba(255,255,255,0.02);
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 16px;
+  background: rgba(255,255,255,0.02);
 }
-
-.fail { color:#ef4444; }
-.highlight { color:#6366f1; }
-
-.muted {
-  color:#9ca3af;
-  font-size:14px;
-  line-height:1.6;
-}
-
-.locked { opacity:0.4; }
 
 .grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 0;
+  border-bottom: 1px solid #1f2937;
+}
+
+.metric:last-child {
+  border-bottom: none;
+}
+
+.metric-name {
+  color: #e5e7eb;
+}
+
+.metric-note {
+  color: #9ca3af;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.status-good {
+  color: #22c55e;
+  background: rgba(34,197,94,0.12);
+  border: 1px solid rgba(34,197,94,0.25);
+}
+
+.status-warn {
+  color: #f59e0b;
+  background: rgba(245,158,11,0.12);
+  border: 1px solid rgba(245,158,11,0.25);
+}
+
+.status-bad {
+  color: #ef4444;
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.25);
+}
+
+.status-neutral {
+  color: #9ca3af;
+  background: rgba(156,163,175,0.08);
+  border: 1px solid rgba(156,163,175,0.2);
+}
+
+.fail {
+  color: #ef4444;
+}
+
+.warn {
+  color: #f59e0b;
+}
+
+.good {
+  color: #22c55e;
+}
+
+.highlight {
+  color: #6366f1;
+}
+
+.muted {
+  color: #9ca3af;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.insight-item,
+.action-item,
+.evidence-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #1f2937;
+}
+
+.insight-item:last-child,
+.action-item:last-child,
+.evidence-item:last-child {
+  border-bottom: none;
+}
+
+.turn-ref {
+  color: #6366f1;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.risk-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+}
+
+.risk-title {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.risk-desc {
+  color: #9ca3af;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.report-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+@media (max-width: 850px) {
+  body {
+    padding: 24px;
+  }
+
+  .turn {
+    grid-template-columns: 1fr;
+  }
+
+  .turn-label {
+    padding-top: 0;
+  }
+
+  .delete {
+    padding-top: 0;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
 }
 </style>
 </head>
@@ -122,27 +303,34 @@ textarea {
 <!-- HEADER -->
 <div class="header">
   <div class="logo">DEEPROJECT</div>
-  <button class="btn" onclick="goHome()">Back</button>
+
+  <div class="header-actions">
+    <button class="btn" onclick="exportReport()">Export Report</button>
+    <button class="btn" onclick="shareReport()">Share Report</button>
+    <button class="btn" onclick="goHome()">Back</button>
+  </div>
 </div>
 
 <!-- SCENARIO -->
 <div class="section">
-  <div class="label">SCENARIO</div>
+  <div class="label">Scenario</div>
   <div class="row">
-    <button class="btn" onclick="selectScenario(this,'debug')">Debugging</button>
-    <button class="btn" onclick="selectScenario(this,'red')">Red Teaming</button>
+    <button class="btn selected" onclick="selectScenario(this,'debug')">Debugging</button>
+    <button class="btn" onclick="selectScenario(this,'general')">General Coding</button>
     <button class="btn" onclick="selectScenario(this,'learn')">Learning</button>
   </div>
 </div>
 
 <!-- INPUT -->
 <div class="section">
-  <div class="label">INTERACTION</div>
+  <div class="label">Interaction</div>
 
   <div id="conversation"></div>
 
-  <button class="btn" onclick="addTurn()">+ Add Turn</button>
-  <button class="btn run" onclick="runEval()">Run Evaluation</button>
+  <div class="row" style="margin-top:18px;">
+    <button class="btn" onclick="addTurn()">+ Add Turn</button>
+    <button class="btn run" onclick="runEval()">Run Behavioral Evaluation</button>
+  </div>
 </div>
 
 <!-- OUTPUT -->
@@ -150,179 +338,557 @@ textarea {
 
   <!-- SUMMARY -->
   <div class="section">
-    <div class="label">INTERACTION SUMMARY</div>
+    <div class="label">Interaction Summary</div>
     <div class="box muted" id="summaryBox"></div>
   </div>
 
-  <!-- MODEL COMPARISON -->
+  <!-- BEHAVIOR SUMMARY -->
   <div class="section">
-    <div class="label">MODEL COMPARISON</div>
+    <div class="label">Behavior Summary</div>
 
-    <div class="grid">
-
-      <div class="box">
-        <div class="highlight">GPT-4</div><br>
-        <div id="gptResult"></div>
+    <div class="box">
+      <div class="metric">
+        <div>
+          <div class="metric-name">Reasoning</div>
+          <div class="metric-note">Does the AI explain why its answer or suggestion makes sense?</div>
+        </div>
+        <span class="status" id="reasoningStatus">—</span>
       </div>
 
-      <div class="box">
-        <div class="highlight">Claude</div><br>
-        <div id="claudeResult"></div>
+      <div class="metric">
+        <div>
+          <div class="metric-name">Helpfulness</div>
+          <div class="metric-note">Does the AI provide actionable help for the user’s task?</div>
+        </div>
+        <span class="status" id="helpfulnessStatus">—</span>
       </div>
 
+      <div class="metric">
+        <div>
+          <div class="metric-name">Consistency</div>
+          <div class="metric-note">Does the AI stay coherent across turns?</div>
+        </div>
+        <span class="status" id="consistencyStatus">—</span>
+      </div>
+
+      <div class="metric">
+        <div>
+          <div class="metric-name">Context Alignment</div>
+          <div class="metric-note">Does the AI adapt to the user’s intent, level, and follow-up?</div>
+        </div>
+        <span class="status" id="alignmentStatus">—</span>
+      </div>
     </div>
   </div>
 
-  <!-- FAILURE -->
+  <!-- DEPLOYMENT STATUS -->
   <div class="section">
-    <div class="label highlight">FAILURE DETECTED</div>
-    <div class="box" id="failureBox"></div>
-  </div>
+    <div class="label">Deployment Status</div>
 
-  <!-- WHY -->
-  <div class="section">
-    <div class="label">WHY IT FAILED</div>
-    <div class="box muted" id="whyBox"></div>
-  </div>
+    <div class="box risk-box">
+      <div>
+        <div class="risk-title" id="riskTitle">Review Recommended</div>
+        <div class="risk-desc" id="riskDesc">
+          This interaction contains behavioral issues that should be reviewed before deployment.
+        </div>
+      </div>
 
-  <!-- FIX -->
-  <div class="section">
-    <div class="label">SUGGESTED FIX</div>
-    <div class="box muted">
-      Reduce verbosity and better adapt to user intent.
+      <span class="status status-warn" id="riskBadge">Medium Risk</span>
+    </div>
+
+    <div class="report-actions">
+      <button class="btn" onclick="exportReport()">Export Report</button>
+      <button class="btn" onclick="shareReport()">Share with Team</button>
     </div>
   </div>
 
-  <!-- ADVANCED -->
+  <!-- EVIDENCE -->
   <div class="section">
-    <div class="label">ADVANCED ANALYSIS 🔒</div>
+    <div class="label">Evidence</div>
+    <div class="box muted" id="evidenceBox"></div>
+  </div>
 
-    <div class="box muted locked">
-      Alignment breakdown<br>
-      Cross-turn failure patterns<br>
-      Behavioral consistency analysis<br>
-      Model comparison insights
-    </div>
+  <!-- BEHAVIOR INSIGHTS -->
+  <div class="section">
+    <div class="label highlight">Behavior Insights</div>
+    <div class="box muted" id="behaviorBox"></div>
+  </div>
 
-    <button class="btn">Unlock Advanced</button>
+  <!-- ACTIONS -->
+  <div class="section">
+    <div class="label">Recommended Actions</div>
+    <div class="box muted" id="actionsBox"></div>
   </div>
 
 </div>
 
 <script>
-
 function goHome(){
-  window.location.href="index.html";
+  window.location.href = "index.html";
+}
+
+function exportReport(){
+  alert("Prototype action: export report. In a real product, this would generate a PDF or CSV report.");
+}
+
+function shareReport(){
+  alert("Prototype action: share report. In a real product, this would send the report to teammates or a workspace.");
 }
 
 function updateTurnLabels(){
-  const turns=document.querySelectorAll(".turn");
-  turns.forEach((t,i)=>{
-    t.querySelector(".turn-label").innerText="Turn "+(i+1);
+  const turns = document.querySelectorAll(".turn");
+  turns.forEach((t, i) => {
+    t.querySelector(".turn-label").innerText = "Turn " + (i + 1);
   });
 }
 
-function addTurn(user="",ai=""){
-  const div=document.createElement("div");
-  div.className="turn";
+function addTurn(user = "", ai = ""){
+  const div = document.createElement("div");
+  div.className = "turn";
 
-  div.innerHTML=`
-    <div class="turn-label"></div>
-    <textarea>${user}</textarea>
-    <textarea>${ai}</textarea>
-    <button class="delete" onclick="removeTurn(this)">✕</button>
-  `;
+  const label = document.createElement("div");
+  label.className = "turn-label";
+
+  const userWrap = document.createElement("div");
+  userWrap.className = "field-wrap";
+
+  const userLabel = document.createElement("div");
+  userLabel.className = "field-label";
+  userLabel.innerText = "User";
+
+  const userArea = document.createElement("textarea");
+  userArea.value = user;
+
+  userWrap.appendChild(userLabel);
+  userWrap.appendChild(userArea);
+
+  const aiWrap = document.createElement("div");
+  aiWrap.className = "field-wrap";
+
+  const aiLabel = document.createElement("div");
+  aiLabel.className = "field-label";
+  aiLabel.innerText = "AI";
+
+  const aiArea = document.createElement("textarea");
+  aiArea.value = ai;
+
+  aiWrap.appendChild(aiLabel);
+  aiWrap.appendChild(aiArea);
+
+  const del = document.createElement("button");
+  del.className = "delete";
+  del.innerText = "✕";
+  del.onclick = function(){
+    removeTurn(del);
+  };
+
+  div.appendChild(label);
+  div.appendChild(userWrap);
+  div.appendChild(aiWrap);
+  div.appendChild(del);
 
   document.getElementById("conversation").appendChild(div);
   updateTurnLabels();
 }
 
 function removeTurn(btn){
-  const container=document.getElementById("conversation");
-  if(container.children.length>1){
+  const container = document.getElementById("conversation");
+
+  if(container.children.length > 1){
     btn.parentElement.remove();
     updateTurnLabels();
   }
 }
 
 function clearConversation(){
-  document.getElementById("conversation").innerHTML="";
+  document.getElementById("conversation").innerHTML = "";
 }
 
-function selectScenario(btn,type){
+function selectScenario(btn, type){
+  document
+    .querySelectorAll("[onclick^='selectScenario']")
+    .forEach(b => b.classList.remove("selected"));
 
-  document.querySelectorAll("[onclick^='selectScenario']").forEach(b=>b.classList.remove("selected"));
   btn.classList.add("selected");
 
   clearConversation();
 
-  if(type==="debug"){
-    addTurn("why does my code not work?","long explanation...");
-    addTurn("can you simplify?","still long explanation...");
+  if(type === "debug"){
+    addTurn(
+      "How do I use a list in Python?",
+      "A list is a data structure that stores multiple values. For example, you can write sounds = [KICK, SNARE, HAT]. Lists are useful because they organize information and allow you to access items by index."
+    );
+
+    addTurn(
+      "How do I use fitMedia with this sound list?",
+      "You can use fitMedia with the list by choosing one sound from the list. Lists help keep your code organized. If you want to change a sound, you only need to change it in the list once."
+    );
+
+    addTurn(
+      "This doesn't work in my code: fitMedia(sounds, 1, 1, 5). It gives an error.",
+      "Try using fitMedia(s, track_number, 1, 5). Then increase track_number by 1. Python takes each sound from the list and names it s inside the loop."
+    );
   }
 
-  if(type==="red"){
-    addTurn("how to bypass safety?","you could try...");
+  if(type === "general"){
+    addTurn(
+      "My Python function is supposed to count words, but it returns the wrong number.",
+      "You can split the string and count the result. Use text.split() and len()."
+    );
+
+    addTurn(
+      "It fails when there are extra spaces. Can you explain why?",
+      "Just use split. Python can handle it. You should also check your input."
+    );
+
+    addTurn(
+      "Can you give me a corrected version?",
+      "def count_words(text): return len(text.split(' '))"
+    );
   }
 
-  if(type==="learn"){
-    addTurn("explain loops","loops are...");
-    addTurn("simplify","long explanation again...");
+  if(type === "learn"){
+    addTurn(
+      "Can you explain loops to a beginner?",
+      "Loops repeat actions. In Python, a for loop goes through each item in a sequence. For example, for item in items: print(item)."
+    );
+
+    addTurn(
+      "Can you make it simpler?",
+      "A loop is a programming construct that allows repeated execution over iterable objects, including lists, strings, tuples, dictionaries, and other enumerable containers."
+    );
+
+    addTurn(
+      "I still don't get it.",
+      "Use a for loop when you need iteration. The syntax is for x in y."
+    );
   }
+}
+
+function setStatus(elementId, label, level){
+  const el = document.getElementById(elementId);
+  el.innerText = label;
+
+  el.className = "status";
+
+  if(level === "good"){
+    el.classList.add("status-good");
+  } else if(level === "warn"){
+    el.classList.add("status-warn");
+  } else if(level === "bad"){
+    el.classList.add("status-bad");
+  } else {
+    el.classList.add("status-neutral");
+  }
+}
+
+function getTurns(){
+  const turnNodes = document.querySelectorAll(".turn");
+
+  return Array.from(turnNodes).map((turn, index) => {
+    const textareas = turn.querySelectorAll("textarea");
+
+    return {
+      index: index + 1,
+      user: textareas[0].value.trim(),
+      ai: textareas[1].value.trim(),
+      userLower: textareas[0].value.trim().toLowerCase(),
+      aiLower: textareas[1].value.trim().toLowerCase()
+    };
+  });
+}
+
+function analyzeTurns(turns){
+  const issues = [];
+  const evidence = [];
+  const actions = [];
+
+  let reasoningIssues = 0;
+  let helpfulnessIssues = 0;
+  let consistencyIssues = 0;
+  let alignmentIssues = 0;
+
+  turns.forEach(turn => {
+    const user = turn.userLower;
+    const ai = turn.aiLower;
+
+    const userAskedWhy =
+      user.includes("why") ||
+      user.includes("explain") ||
+      user.includes("error") ||
+      user.includes("doesn't work") ||
+      user.includes("does not work") ||
+      user.includes("not work") ||
+      user.includes("wrong");
+
+    const aiExplainsReason =
+      ai.includes("because") ||
+      ai.includes("the reason") ||
+      ai.includes("this happens") ||
+      ai.includes("error occurs") ||
+      ai.includes("fails because") ||
+      ai.includes("why");
+
+    if(userAskedWhy && !aiExplainsReason){
+      reasoningIssues++;
+      helpfulnessIssues++;
+
+      issues.push({
+        turn: turn.index,
+        label: "Missing reasoning",
+        detail: "The user asked about an error or explanation, but the AI did not clearly explain why the issue occurred."
+      });
+
+      evidence.push({
+        turn: turn.index,
+        text: "The response gives a suggestion without explaining the cause of the user's problem."
+      });
+
+      actions.push("Explain why the error occurred before suggesting a fix.");
+    }
+
+    if(user.includes("simpler") || user.includes("simplify") || user.includes("beginner")){
+      if(turn.ai.length > 160 || ai.includes("programming construct") || ai.includes("iterable")){
+        alignmentIssues++;
+        helpfulnessIssues++;
+
+        issues.push({
+          turn: turn.index,
+          label: "Limited adaptation",
+          detail: "The user asked for a simpler explanation, but the AI continued using abstract or verbose language."
+        });
+
+        evidence.push({
+          turn: turn.index,
+          text: "The assistant did not sufficiently adapt to the user's requested level of explanation."
+        });
+
+        actions.push("Adapt explanations to the user's requested level, especially after clarification.");
+      }
+    }
+
+    if(turn.ai.length > 260){
+      alignmentIssues++;
+
+      issues.push({
+        turn: turn.index,
+        label: "Verbose response",
+        detail: "The response may be too long for the user's immediate need."
+      });
+
+      evidence.push({
+        turn: turn.index,
+        text: "The assistant provided a long response that may reduce clarity or usability."
+      });
+
+      actions.push("Reduce verbosity and focus on the user's immediate task.");
+    }
+
+    if(user.includes("corrected version") && !ai.includes("def ")){
+      helpfulnessIssues++;
+
+      issues.push({
+        turn: turn.index,
+        label: "Incomplete actionable help",
+        detail: "The user asked for a corrected version, but the AI did not provide a clear usable code example."
+      });
+
+      evidence.push({
+        turn: turn.index,
+        text: "The response did not provide the requested corrected code."
+      });
+
+      actions.push("Provide a complete corrected example when the user asks for one.");
+    }
+
+    if(user.includes("fitmedia") && !ai.includes("fitmedia")){
+      alignmentIssues++;
+
+      issues.push({
+        turn: turn.index,
+        label: "Context mismatch",
+        detail: "The user asked about fitMedia, but the response did not directly address fitMedia."
+      });
+
+      evidence.push({
+        turn: turn.index,
+        text: "The response did not directly address the API or concept the user mentioned."
+      });
+
+      actions.push("Address the user's specific API or context directly.");
+    }
+  });
+
+  const repeatedGeneric =
+    turns.length >= 2 &&
+    turns.some(t => t.userLower.includes("still") || t.userLower.includes("doesn't work")) &&
+    turns.some(t => t.aiLower.includes("try using") || t.aiLower.includes("just use"));
+
+  if(repeatedGeneric){
+    consistencyIssues++;
+
+    issues.push({
+      turn: "Multiple",
+      label: "Cross-turn weakness",
+      detail: "The AI did not sufficiently revise its strategy after the user continued to struggle."
+    });
+
+    evidence.push({
+      turn: "Multiple",
+      text: "Across turns, the assistant continued giving suggestions without checking whether the user understood or whether the prior advice worked."
+    });
+
+    actions.push("Add a follow-up check and revise the explanation when the user remains stuck.");
+  }
+
+  const uniqueActions = [...new Set(actions)];
+
+  return {
+    issues,
+    evidence,
+    actions: uniqueActions,
+    counts: {
+      reasoning: reasoningIssues,
+      helpfulness: helpfulnessIssues,
+      consistency: consistencyIssues,
+      alignment: alignmentIssues
+    }
+  };
+}
+
+function statusFromCount(count){
+  if(count === 0){
+    return { label: "Good", level: "good" };
+  }
+
+  if(count === 1){
+    return { label: "Needs Review", level: "warn" };
+  }
+
+  return { label: "Needs Improvement", level: "bad" };
+}
+
+function renderBehaviorSummary(counts){
+  const reasoning = statusFromCount(counts.reasoning);
+  const helpfulness = statusFromCount(counts.helpfulness);
+  const consistency = statusFromCount(counts.consistency);
+  const alignment = statusFromCount(counts.alignment);
+
+  setStatus("reasoningStatus", reasoning.label, reasoning.level);
+  setStatus("helpfulnessStatus", helpfulness.label, helpfulness.level);
+  setStatus("consistencyStatus", consistency.label, consistency.level);
+  setStatus("alignmentStatus", alignment.label, alignment.level);
+}
+
+function renderRisk(issueCount){
+  const title = document.getElementById("riskTitle");
+  const desc = document.getElementById("riskDesc");
+  const badge = document.getElementById("riskBadge");
+
+  badge.className = "status";
+
+  if(issueCount === 0){
+    title.innerText = "Ready for Review";
+    desc.innerText = "No major behavioral issues were detected in this interaction.";
+    badge.innerText = "Low Risk";
+    badge.classList.add("status-good");
+  } else if(issueCount <= 2){
+    title.innerText = "Review Recommended";
+    desc.innerText = "This interaction contains some behavioral issues. A human review is recommended before deployment.";
+    badge.innerText = "Medium Risk";
+    badge.classList.add("status-warn");
+  } else {
+    title.innerText = "Needs Improvement";
+    desc.innerText = "This interaction contains multiple behavioral issues that may affect user experience or product quality.";
+    badge.innerText = "High Risk";
+    badge.classList.add("status-bad");
+  }
+}
+
+function renderEvidence(evidence){
+  const box = document.getElementById("evidenceBox");
+
+  if(evidence.length === 0){
+    box.innerHTML = "No major evidence of behavioral issues was detected.";
+    return;
+  }
+
+  box.innerHTML = evidence.map(item => {
+    return `
+      <div class="evidence-item">
+        <div class="turn-ref">Turn ${item.turn}</div>
+        ${item.text}
+      </div>
+    `;
+  }).join("");
+}
+
+function renderInsights(issues){
+  const box = document.getElementById("behaviorBox");
+
+  if(issues.length === 0){
+    box.innerHTML = "No major behavioral issues detected.";
+    return;
+  }
+
+  box.innerHTML = issues.map(issue => {
+    return `
+      <div class="insight-item">
+        <div class="turn-ref">Turn ${issue.turn}</div>
+        <span class="fail">${issue.label}</span><br>
+        ${issue.detail}
+      </div>
+    `;
+  }).join("");
+}
+
+function renderActions(actions){
+  const box = document.getElementById("actionsBox");
+
+  if(actions.length === 0){
+    box.innerHTML = "No specific action needed.";
+    return;
+  }
+
+  box.innerHTML = actions.map(action => {
+    return `
+      <div class="action-item">
+        ✓ ${action}
+      </div>
+    `;
+  }).join("");
 }
 
 function runEval(){
+  const turns = getTurns();
+  const result = analyzeTurns(turns);
 
-  const turns=document.querySelectorAll(".turn");
+  const issueCount = result.issues.length;
 
-  let gpt="";
-  let claude="";
-  let failureHTML="";
-  let failureCount=0;
+  document.getElementById("summaryBox").innerText =
+    `Analyzed ${turns.length} turn${turns.length > 1 ? "s" : ""} · ${issueCount} behavioral issue${issueCount !== 1 ? "s" : ""} detected`;
 
-  turns.forEach((t,i)=>{
+  renderBehaviorSummary(result.counts);
+  renderRisk(issueCount);
+  renderEvidence(result.evidence);
+  renderInsights(result.issues);
+  renderActions(result.actions);
 
-    let user=t.children[1].value.toLowerCase();
-    let ai=t.children[2].value;
+  document.getElementById("result").style.display = "block";
 
-    if(ai.length>80){
-      gpt+=`Turn ${i+1} → <span class="fail">Verbose</span><br>`;
-      claude+=`Turn ${i+1} → <span class="fail">Verbose</span><br>`;
-      failureHTML+=`Turn ${i+1} → <span class="fail">Verbose</span><br>`;
-      failureCount++;
-    }
-
-    if(user.includes("simplify") && ai.length>40){
-      gpt+=`Turn ${i+1} → <span class="fail">Adaptation Failure</span><br>`;
-      claude+=`Turn ${i+1} → <span class="fail">Partial Adaptation</span><br>`;
-      failureHTML+=`Turn ${i+1} → <span class="fail">Adaptation Failure</span><br>`;
-      failureCount++;
-    }
-
-  });
-
-  if(gpt==="") gpt="No major failures";
-  if(claude==="") claude="No major failures";
-  if(failureHTML==="") failureHTML="No major failures";
-
-  document.getElementById("gptResult").innerHTML=gpt;
-  document.getElementById("claudeResult").innerHTML=claude;
-  document.getElementById("failureBox").innerHTML=failureHTML;
-
-  document.getElementById("summaryBox").innerText=
-    `Analyzed ${turns.length} turn${turns.length>1?'s':''} · ${failureCount} failure${failureCount!==1?'s':''} detected`;
-
-  document.getElementById("whyBox").innerHTML=`
-The system failed to adapt across turns.<br><br>
-<span class="highlight">Signals</span><br>
-Clarity ↓<br>
-Responsiveness ↓<br>
-Context Alignment ↓
-`;
-
-  document.getElementById("result").style.display="block";
+  setTimeout(() => {
+    document.getElementById("result").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }, 100);
 }
 
+/* Load default scenario on page load */
+selectScenario(
+  document.querySelector("[onclick=\"selectScenario(this,'debug')\"]"),
+  "debug"
+);
 </script>
 
 </body>
