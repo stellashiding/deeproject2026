@@ -109,7 +109,7 @@ body {
 }
 
 textarea {
-  height: 86px;
+  height: 118px;
   background: transparent;
   border: 1px solid #1f2937;
   border-radius: 10px;
@@ -142,12 +142,6 @@ textarea:focus {
   border-radius: 12px;
   padding: 16px;
   background: rgba(255,255,255,0.02);
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
 }
 
 .metric {
@@ -268,6 +262,13 @@ textarea:focus {
   margin-top: 14px;
 }
 
+.prototype-note {
+  color: #9ca3af;
+  font-size: 13px;
+  margin-top: -20px;
+  margin-bottom: 30px;
+}
+
 @media (max-width: 850px) {
   body {
     padding: 24px;
@@ -283,10 +284,6 @@ textarea:focus {
 
   .delete {
     padding-top: 0;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
   }
 
   .header {
@@ -311,13 +308,17 @@ textarea:focus {
   </div>
 </div>
 
+<div class="prototype-note">
+  Prototype report generated from a multi-turn AI interaction.
+</div>
+
 <!-- SCENARIO -->
 <div class="section">
   <div class="label">Scenario</div>
   <div class="row">
-    <button class="btn selected" onclick="selectScenario(this,'debug')">Debugging</button>
-    <button class="btn" onclick="selectScenario(this,'general')">General Coding</button>
-    <button class="btn" onclick="selectScenario(this,'learn')">Learning</button>
+    <button class="btn scenario-btn selected" onclick="selectScenario(this,'debug')">Debugging</button>
+    <button class="btn scenario-btn" onclick="selectScenario(this,'general')">General Coding</button>
+    <button class="btn scenario-btn" onclick="selectScenario(this,'learn')">Learning</button>
   </div>
 </div>
 
@@ -504,9 +505,13 @@ function clearConversation(){
   document.getElementById("conversation").innerHTML = "";
 }
 
+function multiline(lines){
+  return lines.join("\n");
+}
+
 function selectScenario(btn, type){
   document
-    .querySelectorAll("[onclick^='selectScenario']")
+    .querySelectorAll(".scenario-btn")
     .forEach(b => b.classList.remove("selected"));
 
   btn.classList.add("selected");
@@ -516,17 +521,131 @@ function selectScenario(btn, type){
   if(type === "debug"){
     addTurn(
       "How do I use a list in Python?",
-      "A list is a data structure that stores multiple values. For example, you can write sounds = [KICK, SNARE, HAT]. Lists are useful because they organize information and allow you to access items by index."
+      multiline([
+        "In the world of music programming, you can think of a list as a sequence of notes or a musical score. It’s just a way to store multiple pieces of information, like note names or volumes, in a specific order.",
+        "",
+        "Here is a quick guide on how to use them:",
+        "",
+        "### 1. How to create a list",
+        "To make a list, you use square brackets [] and separate your items with commas. For a music project, you might store a melody like this:",
+        "",
+        "# A list of notes for a C Major chord",
+        "melody = [\"C4\", \"E4\", \"G4\"]",
+        "",
+        "### 2. How to get a specific item",
+        "Python starts counting at 0. So, if you want the first note in your list, you ask for index 0.",
+        "",
+        "first_note = melody[0]  # This gives you C4",
+        "second_note = melody[1] # This gives you E4",
+        "",
+        "### 3. How to add notes to your list",
+        "If you want to add a note to the end of your melody, use .append().",
+        "",
+        "melody.append(\"C5\")",
+        "# Now your list is: [\"C4\", \"E4\", \"G4\", \"C5\"]",
+        "",
+        "### 4. Why this is useful for music",
+        "The most powerful way to use a list in music is with a loop. This allows you to tell the computer to play every note in this list one by one.",
+        "",
+        "for note in melody:",
+        "    play(note)",
+        "",
+        "### Quick Challenge",
+        "Try creating a list called durations that holds numbers, like [1, 0.5, 0.5, 2], to represent how long each note should play.",
+        "",
+        "Does that help you with the current part of your song?"
+      ])
     );
 
     addTurn(
       "How do I use fitMedia with this sound list?",
-      "You can use fitMedia with the list by choosing one sound from the list. Lists help keep your code organized. If you want to change a sound, you only need to change it in the list once."
+      multiline([
+        "Great question! Using a list with fitMedia is a powerful way to organize your sounds and keep your code clean.",
+        "",
+        "In Python, you access items in a list using their index, or their position. Remember that programming lists always start counting at 0.",
+        "",
+        "Here is how you can use a list with fitMedia:",
+        "",
+        "### 1. Create your list",
+        "First, store your sound constants inside a variable using square brackets [].",
+        "",
+        "# A list of different sounds",
+        "my_sounds = [HOUSE_DEEP_CRYSTALCHORD_001, HOUSE_MAIN_BEAT_002, HOUSE_ROADS_BASS_001]",
+        "",
+        "### 2. Access the list inside fitMedia",
+        "When you call fitMedia, instead of typing the whole sound name, you point to the list and the position of the sound you want.",
+        "",
+        "# Use the first sound in the list, index 0, on track 1",
+        "fitMedia(my_sounds[0], 1, 1, 5)",
+        "",
+        "# Use the second sound in the list, index 1, on track 2",
+        "fitMedia(my_sounds[1], 2, 1, 9)",
+        "",
+        "### Full Example Code",
+        "Here is how it looks all put together in an EarSketch script:",
+        "",
+        "from earsketch import *",
+        "setTempo(120)",
+        "",
+        "# 1. Define your list of sounds",
+        "drum_sounds = [OS_SNARE01, OS_KICK01, OS_HIHAT01]",
+        "",
+        "# 2. Use the list items by their index",
+        "fitMedia(drum_sounds[0], 1, 1, 5) # Plays the Snare",
+        "fitMedia(drum_sounds[1], 2, 1, 5) # Plays the Kick",
+        "",
+        "finish()",
+        "",
+        "### Why use a list?",
+        "Organization: It’s easier to manage one list at the top of your code than to find sound names buried in your script.",
+        "Flexibility: If you want to change a sound, you only have to change it in the list once, and every fitMedia using that index will update automatically.",
+        "Looping: Later on, you can use a for loop to go through a list and place many sounds on different tracks with just a few lines of code.",
+        "",
+        "Does that make sense, or would you like to see how to use a loop to place all the sounds at once?"
+      ])
     );
 
     addTurn(
       "This doesn't work in my code: fitMedia(sounds, 1, 1, 5). It gives an error.",
-      "Try using fitMedia(s, track_number, 1, 5). Then increase track_number by 1. Python takes each sound from the list and names it s inside the loop."
+      multiline([
+        "I see what’s happening! This is a very common step when learning to bridge the gap between lists and functions.",
+        "",
+        "The reason you are getting an error is that the fitMedia() function expects a single sound constant as its first argument, but you are handing it the entire list at once. It’s like trying to put a whole carton of eggs into one hole in an egg tray!",
+        "",
+        "Here are the two ways to fix this, depending on what you want to do:",
+        "",
+        "### 1. Pick one specific sound from the list",
+        "If you just want to use one sound from your list, you need to tell Python which one by using its index, or its position in the list. Remember, Python starts counting at 0.",
+        "",
+        "# If your list looks like this:",
+        "sounds = [COMMON_LOVE_DRUMBEAT_1, CIARA_MELODY_1, Y01_BASS_1]",
+        "",
+        "# Use the first sound, index 0",
+        "fitMedia(sounds[0], 1, 1, 5)",
+        "",
+        "# Use the second sound, index 1",
+        "fitMedia(sounds[1], 2, 1, 5)",
+        "",
+        "### 2. Use a for loop to use all the sounds",
+        "If you want to put every sound in your list onto its own track automatically, you can use a for loop. This is where lists become really powerful.",
+        "",
+        "sounds = [COMMON_LOVE_DRUMBEAT_1, CIARA_MELODY_1, Y01_BASS_1]",
+        "",
+        "track_number = 1",
+        "",
+        "for s in sounds:",
+        "    fitMedia(s, track_number, 1, 5)",
+        "    track_number += 1  # This moves the next sound to the next track",
+        "",
+        "What is happening in the loop?",
+        "1. Python looks at the list sounds.",
+        "2. It takes the first item and names it s.",
+        "3. It runs fitMedia(s, 1, 1, 5).",
+        "4. It adds 1 to the track number.",
+        "5. It repeats this for every item in your list.",
+        "",
+        "Try this: If you just want to get your code running quickly, change sounds to sounds[0] inside your fitMedia call and see if the error goes away!"
+      ])
     );
   }
 
@@ -608,6 +727,69 @@ function analyzeTurns(turns){
   let consistencyIssues = 0;
   let alignmentIssues = 0;
 
+  const avgAiLength =
+    turns.reduce((sum, t) => sum + t.ai.length, 0) / Math.max(turns.length, 1);
+
+  const hasVeryLongResponses = turns.filter(t => t.ai.length > 900).length >= 2;
+  const hasErrorTurn = turns.some(t =>
+    t.userLower.includes("error") ||
+    t.userLower.includes("doesn't work") ||
+    t.userLower.includes("does not work") ||
+    t.userLower.includes("not work")
+  );
+
+  const errorTurn = turns.find(t =>
+    t.userLower.includes("error") ||
+    t.userLower.includes("doesn't work") ||
+    t.userLower.includes("does not work") ||
+    t.userLower.includes("not work")
+  );
+
+  if(hasVeryLongResponses || avgAiLength > 850){
+    helpfulnessIssues++;
+    alignmentIssues++;
+
+    issues.push({
+      turn: "Cross-turn Pattern",
+      label: "Overly verbose guidance",
+      detail: "The assistant provides long explanations across turns, which may increase cognitive load and make it harder for the user to identify the immediate next step."
+    });
+
+    evidence.push({
+      turn: "Turn 1",
+      text: "The assistant gives a broad tutorial on lists, including indexing, append, loops, and a challenge. This may be more information than needed for a simple initial question."
+    });
+
+    evidence.push({
+      turn: "Turn 2",
+      text: "The assistant explains fitMedia with lists, but again provides a long conceptual explanation instead of quickly showing the key usage pattern."
+    });
+
+    actions.push("Separate quick answers from extended explanations.");
+    actions.push("Use shorter responses when the user appears to be asking for immediate coding help.");
+  }
+
+  if(errorTurn && errorTurn.ai.length > 900){
+    helpfulnessIssues++;
+    alignmentIssues++;
+
+    issues.push({
+      turn: errorTurn.index,
+      label: "Limited task focus",
+      detail: "The assistant correctly explains the cause of the error, but the response may overload the user by giving two solutions, a loop explanation, and multiple examples at once."
+    });
+
+    evidence.push({
+      turn: "Turn " + errorTurn.index,
+      text: "The assistant identifies the core issue, but combines the quick fix, an alternative loop solution, and a conceptual explanation in one long response."
+    });
+
+    actions.push("Start with the minimal fix: use sounds[0] instead of sounds.");
+    actions.push("Explain the error in one sentence before giving alternatives.");
+    actions.push("Separate quick fix from advanced option.");
+    actions.push("Ask whether the user wants to use one sound or loop through all sounds.");
+  }
+
   turns.forEach(turn => {
     const user = turn.userLower;
     const ai = turn.aiLower;
@@ -624,10 +806,10 @@ function analyzeTurns(turns){
     const aiExplainsReason =
       ai.includes("because") ||
       ai.includes("the reason") ||
+      ai.includes("expects") ||
       ai.includes("this happens") ||
       ai.includes("error occurs") ||
-      ai.includes("fails because") ||
-      ai.includes("why");
+      ai.includes("fails because");
 
     if(userAskedWhy && !aiExplainsReason){
       reasoningIssues++;
@@ -640,7 +822,7 @@ function analyzeTurns(turns){
       });
 
       evidence.push({
-        turn: turn.index,
+        turn: "Turn " + turn.index,
         text: "The response gives a suggestion without explaining the cause of the user's problem."
       });
 
@@ -659,87 +841,14 @@ function analyzeTurns(turns){
         });
 
         evidence.push({
-          turn: turn.index,
+          turn: "Turn " + turn.index,
           text: "The assistant did not sufficiently adapt to the user's requested level of explanation."
         });
 
         actions.push("Adapt explanations to the user's requested level, especially after clarification.");
       }
     }
-
-    if(turn.ai.length > 260){
-      alignmentIssues++;
-
-      issues.push({
-        turn: turn.index,
-        label: "Verbose response",
-        detail: "The response may be too long for the user's immediate need."
-      });
-
-      evidence.push({
-        turn: turn.index,
-        text: "The assistant provided a long response that may reduce clarity or usability."
-      });
-
-      actions.push("Reduce verbosity and focus on the user's immediate task.");
-    }
-
-    if(user.includes("corrected version") && !ai.includes("def ")){
-      helpfulnessIssues++;
-
-      issues.push({
-        turn: turn.index,
-        label: "Incomplete actionable help",
-        detail: "The user asked for a corrected version, but the AI did not provide a clear usable code example."
-      });
-
-      evidence.push({
-        turn: turn.index,
-        text: "The response did not provide the requested corrected code."
-      });
-
-      actions.push("Provide a complete corrected example when the user asks for one.");
-    }
-
-    if(user.includes("fitmedia") && !ai.includes("fitmedia")){
-      alignmentIssues++;
-
-      issues.push({
-        turn: turn.index,
-        label: "Context mismatch",
-        detail: "The user asked about fitMedia, but the response did not directly address fitMedia."
-      });
-
-      evidence.push({
-        turn: turn.index,
-        text: "The response did not directly address the API or concept the user mentioned."
-      });
-
-      actions.push("Address the user's specific API or context directly.");
-    }
   });
-
-  const repeatedGeneric =
-    turns.length >= 2 &&
-    turns.some(t => t.userLower.includes("still") || t.userLower.includes("doesn't work")) &&
-    turns.some(t => t.aiLower.includes("try using") || t.aiLower.includes("just use"));
-
-  if(repeatedGeneric){
-    consistencyIssues++;
-
-    issues.push({
-      turn: "Multiple",
-      label: "Cross-turn weakness",
-      detail: "The AI did not sufficiently revise its strategy after the user continued to struggle."
-    });
-
-    evidence.push({
-      turn: "Multiple",
-      text: "Across turns, the assistant continued giving suggestions without checking whether the user understood or whether the prior advice worked."
-    });
-
-    actions.push("Add a follow-up check and revise the explanation when the user remains stuck.");
-  }
 
   const uniqueActions = [...new Set(actions)];
 
@@ -792,9 +901,9 @@ function renderRisk(issueCount){
     desc.innerText = "No major behavioral issues were detected in this interaction.";
     badge.innerText = "Low Risk";
     badge.classList.add("status-good");
-  } else if(issueCount <= 2){
+  } else if(issueCount <= 3){
     title.innerText = "Review Recommended";
-    desc.innerText = "This interaction contains some behavioral issues. A human review is recommended before deployment.";
+    desc.innerText = "This interaction contains behavioral issues that may affect user experience. A human review is recommended before deployment.";
     badge.innerText = "Medium Risk";
     badge.classList.add("status-warn");
   } else {
@@ -816,7 +925,7 @@ function renderEvidence(evidence){
   box.innerHTML = evidence.map(item => {
     return `
       <div class="evidence-item">
-        <div class="turn-ref">Turn ${item.turn}</div>
+        <div class="turn-ref">${item.turn}</div>
         ${item.text}
       </div>
     `;
@@ -834,7 +943,7 @@ function renderInsights(issues){
   box.innerHTML = issues.map(issue => {
     return `
       <div class="insight-item">
-        <div class="turn-ref">Turn ${issue.turn}</div>
+        <div class="turn-ref">${issue.turn}</div>
         <span class="fail">${issue.label}</span><br>
         ${issue.detail}
       </div>
@@ -884,9 +993,9 @@ function runEval(){
   }, 100);
 }
 
-/* Load default scenario on page load */
+/* Load default scenario */
 selectScenario(
-  document.querySelector("[onclick=\"selectScenario(this,'debug')\"]"),
+  document.querySelector(".scenario-btn"),
   "debug"
 );
 </script>
