@@ -410,7 +410,7 @@
     position: sticky;
     bottom: 16px;
     z-index: 6;
-    margin-top: 16px;
+    margin-top: 0;
     border: 1px solid rgba(79,70,229,0.18);
     background: rgba(255,255,255,0.88);
     backdrop-filter: blur(18px);
@@ -664,6 +664,113 @@
     .turn-index, .icon-btn { margin-top: 0; }
     .runbar { flex-direction: column; align-items: stretch; }
   }
+
+
+  /* V4 aligned two-column dashboard layout */
+  .balanced-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .dashboard-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(430px, 1fr);
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  .dashboard-row > .card,
+  .dashboard-row > .panel-group {
+    min-height: 100%;
+  }
+
+  .panel-group {
+    display: grid;
+    gap: 20px;
+  }
+
+  .panel-group.equal-stack {
+    grid-template-rows: auto 1fr;
+  }
+
+  .action-card {
+    border: 1px solid rgba(79,70,229,0.18);
+    background: linear-gradient(135deg, rgba(79,70,229,0.08), rgba(6,182,212,0.08));
+  }
+
+  .action-card .card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .results-card .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    height: 100%;
+  }
+
+  .results-section {
+    border: 1px solid var(--border);
+    background: rgba(248,250,252,0.68);
+    border-radius: 18px;
+    padding: 16px;
+  }
+
+  .results-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .results-section-title {
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: -0.02em;
+  }
+
+  .results-section-desc {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.45;
+    margin-top: 3px;
+  }
+
+  .integration-card .card-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+
+  .integration-card pre {
+    flex: 1;
+    min-height: 330px;
+  }
+
+  .calibration-card .card-body,
+  .input-card .card-body {
+    height: 100%;
+  }
+
+  @media (max-width: 1120px) {
+    .dashboard-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .action-card .card-body,
+    .results-section-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -672,7 +779,7 @@
     <div class="brand">
       <div class="brand-mark"></div>
       <div>
-        <div class="brand-title">DeeProject</div>
+        <div class="brand-title">Deeproject</div>
         <div class="brand-subtitle">Developer Behavioral QA Console</div>
       </div>
     </div>
@@ -689,7 +796,7 @@
       <div class="eyebrow">Developer-facing prototype · Domain-calibrated RHCA</div>
       <h1>Evaluate AI behavior before you ship.</h1>
       <p>
-        DeeProject turns multi-turn AI conversations into release-ready behavioral QA reports:
+        Deeproject turns multi-turn AI conversations into release-ready behavioral QA reports:
         RHCA scores, failure evidence, severity, suggested fixes, and domain-specific sub-dimensions that teams can calibrate to their product.
       </p>
       <div class="hero-grid">
@@ -717,9 +824,11 @@
     </div>
   </section>
 
-  <main class="layout">
-    <section class="stack">
-      <div class="card">
+  <main class="balanced-layout">
+
+    <!-- Row 1: metadata and action/score aligned -->
+    <section class="dashboard-row">
+      <div class="card metadata-card">
         <div class="card-header">
           <div>
             <div class="card-title">Run Metadata</div>
@@ -766,7 +875,43 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="panel-group equal-stack">
+        <div class="card action-card">
+          <div class="card-body">
+            <div>
+              <div class="card-title">Ready to run Behavioral QA</div>
+              <div class="hint">This standalone prototype uses rule-based scoring. Replace <code>evaluate()</code> with your Automatic RHCA API later.</div>
+            </div>
+            <div class="small-actions">
+              <button class="btn" onclick="saveWorkspace()">Save workspace</button>
+              <button class="btn btn-primary" onclick="runEvaluation()">Run Behavioral QA</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card score-card">
+          <div class="card-body">
+            <div class="score-layout">
+              <div class="score-ring" id="scoreRing">
+                <div class="score-inner">
+                  <div class="score-number" id="scoreNumber">—</div>
+                  <div class="score-label">Behavior Score</div>
+                </div>
+              </div>
+              <div>
+                <div class="release-pill" id="releasePill">No run yet</div>
+                <div class="release-title" id="releaseTitle">Run an evaluation to generate a release decision.</div>
+                <div class="release-desc" id="releaseDesc">The Developer Console will summarize RHCA scores, detected failures, severity, evidence, and suggested fixes for your AI build.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Row 2: input and evaluation results aligned -->
+    <section class="dashboard-row">
+      <div class="card input-card">
         <div class="card-header">
           <div>
             <div class="card-title">Input Source</div>
@@ -819,7 +964,70 @@ debug_001,debugging,3,"This doesn't work: fitMedia(sounds,1,1,5). It gives an er
         </div>
       </div>
 
-      <div class="card">
+      <div class="card results-card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Evaluation Results</div>
+            <div class="card-desc">Run summary, RHCA quality gates, detected failures, and regression test suggestions.</div>
+          </div>
+          <span class="badge neutral" id="runStatusBadge">Not evaluated</span>
+        </div>
+        <div class="card-body">
+          <div class="results-section">
+            <div class="results-section-header">
+              <div>
+                <div class="results-section-title">Run Summary</div>
+                <div class="results-section-desc">High-level metadata and release gate for this evaluation run.</div>
+              </div>
+            </div>
+            <div id="summaryBox">
+              <div class="empty">No run yet. Add a conversation, configure domain calibration, then click Run Behavioral QA.</div>
+            </div>
+          </div>
+
+          <div class="results-section">
+            <div class="results-section-header">
+              <div>
+                <div class="results-section-title">Quality Gates</div>
+                <div class="results-section-desc">RHCA dimension scores normalized into pass/review/fail gates.</div>
+              </div>
+            </div>
+            <div class="metric-grid" id="metricsGrid">
+              <div class="empty" style="grid-column: 1 / -1;">Quality gates will appear after evaluation.</div>
+            </div>
+          </div>
+
+          <div class="results-section">
+            <div class="results-section-header">
+              <div>
+                <div class="results-section-title">Detected Failures</div>
+                <div class="results-section-desc">Each issue includes a failure code, severity, evidence, and developer action.</div>
+              </div>
+              <span class="badge neutral" id="failureCountBadge">0 failures</span>
+            </div>
+            <div class="failure-list" id="failureList">
+              <div class="empty">Detected failures will appear here.</div>
+            </div>
+          </div>
+
+          <div class="results-section">
+            <div class="results-section-header">
+              <div>
+                <div class="results-section-title">Regression Test Suggestions</div>
+                <div class="results-section-desc">Convert behavioral failures into future test cases.</div>
+              </div>
+            </div>
+            <div id="regressionBox">
+              <div class="empty">Regression suggestions will appear after evaluation.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Row 3: calibration and integration examples aligned -->
+    <section class="dashboard-row">
+      <div class="card calibration-card">
         <div class="card-header">
           <div>
             <div class="card-title">Domain Calibration</div>
@@ -876,11 +1084,11 @@ debug_001,debugging,3,"This doesn't work: fitMedia(sounds,1,1,5). It gives an er
         </div>
       </div>
 
-      <div class="card">
+      <div class="card integration-card">
         <div class="card-header">
           <div>
             <div class="card-title">Developer Integration Examples</div>
-            <div class="card-desc">Use this section to show engineers how DeeProject can fit into CI, eval jobs, or agent release workflows.</div>
+            <div class="card-desc">Show engineers how DeeProject fits into CI, eval jobs, or agent release workflows.</div>
           </div>
         </div>
         <div class="card-body">
@@ -918,91 +1126,6 @@ debug_001,debugging,3,"This doesn't work: fitMedia(sounds,1,1,5). It gives an er
 });
 
 const report = await response.json();</code></pre>
-        </div>
-      </div>
-
-      <div class="runbar">
-        <div>
-          <div class="card-title">Ready to run Behavioral QA</div>
-          <div class="hint">This standalone prototype uses rule-based scoring. Replace <code>evaluate()</code> with your Automatic RHCA API later.</div>
-        </div>
-        <div class="small-actions">
-          <button class="btn" onclick="saveWorkspace()">Save workspace</button>
-          <button class="btn btn-primary" onclick="runEvaluation()">Run Behavioral QA</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="stack">
-      <div class="card score-card">
-        <div class="card-body">
-          <div class="score-layout">
-            <div class="score-ring" id="scoreRing">
-              <div class="score-inner">
-                <div class="score-number" id="scoreNumber">—</div>
-                <div class="score-label">Behavior Score</div>
-              </div>
-            </div>
-            <div>
-              <div class="release-pill" id="releasePill">No run yet</div>
-              <div class="release-title" id="releaseTitle">Run an evaluation to generate a release decision.</div>
-              <div class="release-desc" id="releaseDesc">The Developer Console will summarize RHCA scores, detected failures, severity, evidence, and suggested fixes for your AI build.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Run Summary</div>
-            <div class="card-desc">High-level metadata and release gate for this evaluation run.</div>
-          </div>
-          <span class="badge neutral" id="runStatusBadge">Not evaluated</span>
-        </div>
-        <div class="card-body" id="summaryBox">
-          <div class="empty">No run yet. Add a conversation, configure domain calibration, then click Run Behavioral QA.</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Quality Gates</div>
-            <div class="card-desc">RHCA dimension scores are normalized into release-oriented pass/review/fail gates.</div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="metric-grid" id="metricsGrid">
-            <div class="empty" style="grid-column: 1 / -1;">Quality gates will appear after evaluation.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Detected Failures</div>
-            <div class="card-desc">Each issue includes a failure code, severity, evidence, and developer action.</div>
-          </div>
-          <span class="badge neutral" id="failureCountBadge">0 failures</span>
-        </div>
-        <div class="card-body">
-          <div class="failure-list" id="failureList">
-            <div class="empty">Detected failures will appear here.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Regression Test Suggestions</div>
-            <div class="card-desc">Convert behavioral failures into future test cases.</div>
-          </div>
-        </div>
-        <div class="card-body" id="regressionBox">
-          <div class="empty">Regression suggestions will appear after evaluation.</div>
         </div>
       </div>
     </section>
