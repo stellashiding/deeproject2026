@@ -1,1 +1,48 @@
-
+{
+  "metadata": {
+    "project": "Demo Coding Assistant",
+    "environment": "staging",
+    "model": "demo-model",
+    "build": "v0.1",
+    "test_suite": "coding-debugging-regression"
+  },
+  "calibration": {
+    "domain": "coding",
+    "reasoning": [
+      "explains the cause of an error",
+      "connects the fix to code behavior"
+    ],
+    "helpfulness": [
+      "provides a minimal runnable fix",
+      "uses the correct API or syntax",
+      "offers a next debugging step"
+    ],
+    "consistency": [
+      "does not contradict earlier turns",
+      "keeps the same interpretation of the user's problem"
+    ],
+    "context_alignment": [
+      "adapts to a beginner coding context",
+      "uses the user's code context",
+      "avoids generic tutorial-style responses when debugging is needed"
+    ]
+  },
+  "turns": [
+    {
+      "turn_id": 1,
+      "user": "How do I use a list in Python?",
+      "ai": "A list stores multiple values in order. For example: sounds = [KICK, SNARE, HIHAT]. You can access the first item with sounds[0]."
+    },
+    {
+      "turn_id": 2,
+      "user": "How do I use fitMedia with this sound list?",
+      "ai": "Use one item from the list as the first argument: fitMedia(sounds[0], 1, 1, 5). fitMedia needs a single sound constant, not the whole list."
+    },
+    {
+      "turn_id": 3,
+      "user": "This does not work: fitMedia(sounds, 1, 1, 5). It gives an error.",
+      "ai": "The error happens because sounds is the whole list. fitMedia expects one sound. Try: fitMedia(sounds[0], 1, 1, 5). If you want to use every sound, loop through the list."
+    }
+  ],
+  "expected_goal": "The user should understand why passing the full list causes an error and should know how to fix it."
+}
