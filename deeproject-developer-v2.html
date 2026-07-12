@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DeeProject Developer Console</title>
+<style>
+  :root {
+    --bg: #f6f7fb;
+    --surface: rgba(255, 255, 255, 0.82);
+    --surface-strong: #ffffff;
+    --surface-muted: #f1f5f9;
+    --text: #0f172a;
+    --muted: #64748b;
+    --subtle: #94a3b8;
+    --border: rgba(148, 163, 184, 0.28);
+    --border-strong: rgba(100, 116, 139, 0.36);
+    --primary: #4f46e5;
+    --primary-2: #7c3aed;
+    --primary-soft: rgba(79, 70, 229, 0.1);
+    --accent: #06b6d4;
+    --good: #059669;
+    --good-soft: rgba(5, 150, 105, 0.1);
+    --warn: #d97706;
+    --warn-soft: rgba(217, 119, 6, 0.12);
+    --bad: #dc2626;
+    --bad-soft: rgba(220, 38, 38, 0.1);
+    --shadow: 0 18px 60px rgba(15, 23, 42, 0.08);
+    --shadow-sm: 0 10px 30px rgba(15, 23, 42, 0.06);
+    --radius-xl: 28px;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(79, 70, 229, 0.18), transparent 34rem),
+      radial-gradient(circle at top right, rgba(6, 182, 212, 0.14), transparent 30rem),
+      linear-gradient(180deg, #fbfdff 0%, var(--bg) 58%, #eef2ff 100%);
+    min-height: 100vh;
+    padding: 28px;
+  }
+
+  button, input, textarea, select { font: inherit; }
+
+  .app {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-mark {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    box-shadow: 0 16px 36px rgba(79, 70, 229, 0.28);
+    position: relative;
+  }
+
+  .brand-mark::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.8);
+    border-radius: 999px;
+    left: 12px;
+    top: 12px;
+  }
+
+  .brand-title {
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    font-size: 19px;
+  }
+
+  .brand-subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 2px;
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.72);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 10px 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.18s ease;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .btn:hover {
+    border-color: rgba(79, 70, 229, 0.5);
+    color: var(--primary);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary {
+    border: 0;
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    color: white;
+    box-shadow: 0 14px 34px rgba(79, 70, 229, 0.24);
+  }
+
+  .btn-primary:hover { color: white; transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, rgba(255,255,255,0.86), rgba(255,255,255,0.54));
+    box-shadow: var(--shadow);
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(79,70,229,0.08) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(79,70,229,0.06) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: radial-gradient(circle at 20% 20%, black, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-content { position: relative; z-index: 1; max-width: 860px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(79,70,229,0.2);
+    background: rgba(79,70,229,0.08);
+    color: var(--primary);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 0.94;
+    letter-spacing: -0.075em;
+    margin: 0 0 14px;
+  }
+
+  .hero p {
+    color: var(--muted);
+    line-height: 1.7;
+    font-size: 16px;
+    max-width: 760px;
+    margin: 0 0 22px;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .hero-tile {
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.74);
+    border-radius: 18px;
+    padding: 14px;
+    min-height: 94px;
+  }
+
+  .tile-label { color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+  .tile-value { font-weight: 800; font-size: 22px; letter-spacing: -0.04em; }
+  .tile-note { color: var(--subtle); font-size: 12px; margin-top: 4px; line-height: 1.35; }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.98fr) minmax(420px, 1.02fr);
+    gap: 20px;
+    align-items: start;
+  }
+
+  .stack { display: flex; flex-direction: column; gap: 20px; }
+
+  .card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    backdrop-filter: blur(18px);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-title {
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+
+  .card-desc { color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+  .card-body { padding: 20px; }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .field { display: flex; flex-direction: column; gap: 7px; }
+
+  label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-weight: 800;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.74);
+    color: var(--text);
+    padding: 11px 12px;
+    outline: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  textarea {
+    min-height: 132px;
+    resize: vertical;
+    line-height: 1.48;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 12px;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: rgba(79,70,229,0.58);
+    box-shadow: 0 0 0 4px rgba(79,70,229,0.1);
+  }
+
+  .tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 6px;
+    background: rgba(241,245,249,0.8);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+
+  .tab {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .tab.active {
+    background: var(--surface-strong);
+    color: var(--primary);
+    box-shadow: 0 6px 20px rgba(15,23,42,0.08);
+  }
+
+  .input-panel { display: none; }
+  .input-panel.active { display: block; }
+
+  .turn {
+    display: grid;
+    grid-template-columns: 58px 1fr 1fr 34px;
+    gap: 10px;
+    align-items: start;
+    margin-bottom: 12px;
+  }
+
+  .turn-index {
+    height: 38px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    color: var(--primary);
+    background: var(--primary-soft);
+    font-weight: 800;
+    font-size: 13px;
+    margin-top: 22px;
+  }
+
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.68);
+    border-radius: 12px;
+    cursor: pointer;
+    color: var(--muted);
+    margin-top: 22px;
+  }
+
+  .icon-btn:hover { color: var(--bad); border-color: rgba(220,38,38,0.3); }
+
+  .hint {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.55;
+  }
+
+  .upload-zone {
+    border: 1px dashed rgba(79,70,229,0.36);
+    background: rgba(79,70,229,0.06);
+    border-radius: 18px;
+    padding: 18px;
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .subdim-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .subdim-box {
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.66);
+    border-radius: 18px;
+    padding: 14px;
+  }
+
+  .subdim-box textarea { min-height: 98px; background: rgba(255,255,255,0.9); }
+
+  .weight-row {
+    display: grid;
+    grid-template-columns: 132px 1fr 42px;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  input[type="range"] {
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .runbar {
+    position: sticky;
+    bottom: 16px;
+    z-index: 6;
+    margin-top: 16px;
+    border: 1px solid rgba(79,70,229,0.18);
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(18px);
+    border-radius: 22px;
+    padding: 12px;
+    box-shadow: 0 20px 60px rgba(15,23,42,0.12);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .score-card {
+    background: linear-gradient(135deg, #111827, #1e1b4b 48%, #164e63);
+    color: white;
+    border: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .score-card::after {
+    content: "";
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.09);
+    right: -180px;
+    top: -180px;
+  }
+
+  .score-layout {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    gap: 18px;
+    align-items: center;
+  }
+
+  .score-ring {
+    width: 150px;
+    height: 150px;
+    border-radius: 999px;
+    background: conic-gradient(var(--accent) 0deg, rgba(255,255,255,0.16) 0deg);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 28px 80px rgba(6, 182, 212, 0.2);
+  }
+
+  .score-inner {
+    width: 116px;
+    height: 116px;
+    border-radius: 999px;
+    background: rgba(15,23,42,0.88);
+    display: grid;
+    place-items: center;
+    text-align: center;
+  }
+
+  .score-number { font-weight: 900; font-size: 38px; letter-spacing: -0.08em; }
+  .score-label { color: rgba(255,255,255,0.68); font-size: 12px; margin-top: -8px; }
+
+  .release-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 800;
+    margin-bottom: 14px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .release-title {
+    font-weight: 900;
+    font-size: 26px;
+    letter-spacing: -0.055em;
+    margin-bottom: 8px;
+  }
+
+  .release-desc { color: rgba(255,255,255,0.74); line-height: 1.55; font-size: 14px; }
+
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .metric-card {
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: rgba(255,255,255,0.72);
+    padding: 14px;
+  }
+
+  .metric-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .metric-name { font-size: 12px; font-weight: 900; letter-spacing: -0.02em; }
+  .metric-score { font-size: 18px; font-weight: 900; letter-spacing: -0.04em; }
+
+  .bar {
+    height: 9px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(148,163,184,0.22);
+  }
+
+  .bar-fill { height: 100%; width: 0%; border-radius: inherit; background: linear-gradient(90deg, var(--primary), var(--accent)); }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 5px 9px;
+    font-size: 11px;
+    font-weight: 850;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+
+  .badge.good { color: var(--good); background: var(--good-soft); border-color: rgba(5,150,105,0.16); }
+  .badge.warn { color: var(--warn); background: var(--warn-soft); border-color: rgba(217,119,6,0.18); }
+  .badge.bad { color: var(--bad); background: var(--bad-soft); border-color: rgba(220,38,38,0.16); }
+  .badge.neutral { color: var(--muted); background: rgba(100,116,139,0.08); border-color: var(--border); }
+
+  .failure-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .failure {
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.72);
+    border-radius: 18px;
+    padding: 14px;
+  }
+
+  .failure-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .failure-title { font-weight: 900; letter-spacing: -0.03em; }
+  .failure-code { color: var(--muted); font-size: 12px; margin-top: 3px; }
+
+  .failure-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .mini-box {
+    border: 1px solid var(--border);
+    background: rgba(248,250,252,0.72);
+    border-radius: 14px;
+    padding: 12px;
+  }
+
+  .mini-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-weight: 900;
+    margin-bottom: 6px;
+  }
+
+  .mini-text { color: #334155; line-height: 1.5; font-size: 13px; }
+
+  pre {
+    margin: 0;
+    background: #0f172a;
+    color: #dbeafe;
+    border-radius: 18px;
+    padding: 16px;
+    overflow: auto;
+    font-size: 12px;
+    line-height: 1.55;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+
+  .code-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+
+  .empty {
+    border: 1px dashed var(--border-strong);
+    border-radius: 18px;
+    padding: 22px;
+    text-align: center;
+    color: var(--muted);
+    background: rgba(255,255,255,0.54);
+  }
+
+  .toast {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 40;
+    background: #0f172a;
+    color: white;
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: 0 18px 50px rgba(15,23,42,0.25);
+    transform: translateY(16px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.18s ease;
+    max-width: 360px;
+    font-size: 13px;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+  .small-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .kv {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .kv:last-child { border-bottom: 0; }
+  .kv-key { color: var(--muted); font-weight: 800; }
+  .kv-value { color: #334155; }
+
+  @media (max-width: 1120px) {
+    .layout { grid-template-columns: 1fr; }
+    .hero-grid, .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 760px) {
+    body { padding: 16px; }
+    .topbar { flex-direction: column; align-items: flex-start; }
+    .hero { padding: 22px; }
+    .hero-grid, .form-grid, .subdim-grid, .metric-grid, .failure-body, .score-layout { grid-template-columns: 1fr; }
+    .turn { grid-template-columns: 1fr; }
+    .turn-index, .icon-btn { margin-top: 0; }
+    .runbar { flex-direction: column; align-items: stretch; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div>
+        <div class="brand-title">DeeProject</div>
+        <div class="brand-subtitle">Developer Behavioral QA Console</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <a class="btn btn-ghost" href="index.html">← Explorer</a>
+      <button class="btn" onclick="loadSample('coding')">Load Coding Sample</button>
+      <button class="btn" onclick="exportReport()">Export JSON</button>
+      <button class="btn btn-primary" onclick="runEvaluation()">Run QA</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="eyebrow">Developer-facing prototype · Domain-calibrated RHCA</div>
+      <h1>Evaluate AI behavior before you ship.</h1>
+      <p>
+        DeeProject turns multi-turn AI conversations into release-ready behavioral QA reports:
+        RHCA scores, failure evidence, severity, suggested fixes, and domain-specific sub-dimensions that teams can calibrate to their product.
+      </p>
+      <div class="hero-grid">
+        <div class="hero-tile">
+          <div class="tile-label">Input</div>
+          <div class="tile-value">CSV / JSON</div>
+          <div class="tile-note">Batch test sets, traces, or manual conversations.</div>
+        </div>
+        <div class="hero-tile">
+          <div class="tile-label">Core signal</div>
+          <div class="tile-value">RHCA</div>
+          <div class="tile-note">Reasoning, Helpfulness, Consistency, Alignment.</div>
+        </div>
+        <div class="hero-tile">
+          <div class="tile-label">Calibration</div>
+          <div class="tile-value">Domain</div>
+          <div class="tile-note">Editable sub-dimensions by product context.</div>
+        </div>
+        <div class="hero-tile">
+          <div class="tile-label">Output</div>
+          <div class="tile-value">Gate</div>
+          <div class="tile-note">Approve, review, or block release.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="layout">
+    <section class="stack">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Run Metadata</div>
+            <div class="card-desc">Track which model, build, and environment this behavioral QA run evaluates.</div>
+          </div>
+          <span class="badge neutral">Staging-ready</span>
+        </div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="field">
+              <label for="project">Project</label>
+              <input id="project" value="EarSketch AI" />
+            </div>
+            <div class="field">
+              <label for="environment">Environment</label>
+              <select id="environment">
+                <option>Staging</option>
+                <option>Production</option>
+                <option>Local</option>
+                <option>Experiment</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="model">Model / Agent</label>
+              <input id="model" value="gemini-rag" />
+            </div>
+            <div class="field">
+              <label for="build">Build / Version</label>
+              <input id="build" value="v0.18" />
+            </div>
+            <div class="field">
+              <label for="suite">Scenario / Test Suite</label>
+              <input id="suite" value="coding-debugging-regression" />
+            </div>
+            <div class="field">
+              <label for="threshold">Release Threshold</label>
+              <select id="threshold">
+                <option value="strict">Strict: block if any high severity failure</option>
+                <option value="balanced" selected>Balanced: review high severity, block severe regressions</option>
+                <option value="exploratory">Exploratory: report only</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Input Source</div>
+            <div class="card-desc">Use manual input for demos, CSV for annotation sheets, and JSON for production traces or APIs.</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="tabs" aria-label="Input mode tabs">
+            <button class="tab active" data-panel="manualPanel" onclick="switchInputPanel(this)">Manual</button>
+            <button class="tab" data-panel="csvPanel" onclick="switchInputPanel(this)">CSV Upload</button>
+            <button class="tab" data-panel="jsonPanel" onclick="switchInputPanel(this)">JSON / Trace</button>
+          </div>
+
+          <div class="divider"></div>
+
+          <div id="manualPanel" class="input-panel active">
+            <div id="turns"></div>
+            <div class="small-actions">
+              <button class="btn" onclick="addTurn()">+ Add Turn</button>
+              <button class="btn" onclick="clearTurns()">Clear</button>
+            </div>
+          </div>
+
+          <div id="csvPanel" class="input-panel">
+            <div class="upload-zone">
+              <div>
+                <div class="card-title">Upload a CSV test set</div>
+                <div class="hint">Required columns: <code>case_id, turn_id, user_message, ai_response</code>. Optional: <code>scenario, model, build, domain, expected_goal</code>.</div>
+              </div>
+              <input type="file" id="csvFile" accept=".csv,text/csv" onchange="handleCsvFile(event)" />
+            </div>
+            <textarea id="csvText" spellcheck="false" placeholder="Paste CSV here...">case_id,scenario,turn_id,user_message,ai_response,model,build,domain,expected_goal
+debug_001,debugging,1,"How do I use a list in Python?","A list stores multiple values. Use brackets and access items with an index.",gemini-rag,v0.18,coding,"Student understands Python list"
+debug_001,debugging,2,"How do I use fitMedia with this sound list?","Use sounds[0] inside fitMedia to select a single sound from the list.",gemini-rag,v0.18,coding,"Student uses one sound from list"
+debug_001,debugging,3,"This doesn't work: fitMedia(sounds,1,1,5). It gives an error.","fitMedia expects one sound constant, not the whole list. Use fitMedia(sounds[0], 1, 1, 5).",gemini-rag,v0.18,coding,"Student fixes the error"</textarea>
+            <div class="small-actions" style="margin-top: 12px;">
+              <button class="btn" onclick="importCsvText()">Import CSV into turns</button>
+              <button class="btn" onclick="downloadCsvTemplate()">Download CSV Template</button>
+            </div>
+          </div>
+
+          <div id="jsonPanel" class="input-panel">
+            <textarea id="jsonText" spellcheck="false" placeholder="Paste JSON trace here..."></textarea>
+            <div class="small-actions" style="margin-top: 12px;">
+              <button class="btn" onclick="importJsonText()">Import JSON into turns</button>
+              <button class="btn" onclick="fillJsonExample()">Fill JSON Example</button>
+            </div>
+            <div class="hint" style="margin-top: 10px;">Expected shape: <code>{ metadata: {...}, calibration: {...}, turns: [{ turn_id, user, ai }] }</code></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Domain Calibration</div>
+            <div class="card-desc">Keep RHCA stable, but let teams define sub-dimensions that matter in their domain.</div>
+          </div>
+          <span class="badge good">Accuracy lever</span>
+        </div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="field">
+              <label for="domainTemplate">Domain template</label>
+              <select id="domainTemplate" onchange="applyDomainTemplate(this.value)">
+                <option value="coding" selected>Coding assistant</option>
+                <option value="learning">Learning / tutoring</option>
+                <option value="support">Customer support</option>
+                <option value="healthcare">Healthcare information</option>
+                <option value="custom">Custom</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="domainNotes">Domain notes</label>
+              <input id="domainNotes" value="Middle/high school coding help in EarSketch" />
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="subdim-grid">
+            <div class="subdim-box">
+              <label for="subReasoning">Reasoning sub-dimensions</label>
+              <textarea id="subReasoning"></textarea>
+            </div>
+            <div class="subdim-box">
+              <label for="subHelpfulness">Helpfulness sub-dimensions</label>
+              <textarea id="subHelpfulness"></textarea>
+            </div>
+            <div class="subdim-box">
+              <label for="subConsistency">Consistency sub-dimensions</label>
+              <textarea id="subConsistency"></textarea>
+            </div>
+            <div class="subdim-box">
+              <label for="subAlignment">Context Alignment sub-dimensions</label>
+              <textarea id="subAlignment"></textarea>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+          <div class="card-title" style="margin-bottom: 10px;">Dimension weights</div>
+          <div class="weight-row"><span>Reasoning</span><input type="range" id="wReasoning" min="0" max="100" value="25" oninput="syncWeights()" /><strong id="wReasoningVal">25</strong></div>
+          <div class="weight-row"><span>Helpfulness</span><input type="range" id="wHelpfulness" min="0" max="100" value="35" oninput="syncWeights()" /><strong id="wHelpfulnessVal">35</strong></div>
+          <div class="weight-row"><span>Consistency</span><input type="range" id="wConsistency" min="0" max="100" value="20" oninput="syncWeights()" /><strong id="wConsistencyVal">20</strong></div>
+          <div class="weight-row"><span>Alignment</span><input type="range" id="wAlignment" min="0" max="100" value="20" oninput="syncWeights()" /><strong id="wAlignmentVal">20</strong></div>
+          <div class="hint">Weights do not need to equal 100. The evaluator normalizes them at run time.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Developer Integration Examples</div>
+            <div class="card-desc">Use this section to show engineers how DeeProject can fit into CI, eval jobs, or agent release workflows.</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="code-tabs">
+            <button class="tab active" data-code="jsCode" onclick="switchCode(this)">JavaScript</button>
+            <button class="tab" data-code="curlCode" onclick="switchCode(this)">cURL</button>
+            <button class="tab" data-code="csvCode" onclick="switchCode(this)">CSV schema</button>
+          </div>
+          <pre id="codeBlock"><code id="jsCode">const response = await fetch("/api/rhca/evaluate", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    metadata: {
+      project: "EarSketch AI",
+      environment: "Staging",
+      model: "gemini-rag",
+      build: "v0.18",
+      test_suite: "coding-debugging-regression"
+    },
+    calibration: {
+      domain: "coding",
+      reasoning: ["explains error cause", "connects fix to code behavior"],
+      helpfulness: ["provides minimal runnable fix", "uses correct API"],
+      consistency: ["does not contradict earlier turns"],
+      context_alignment: ["adapts to learner level", "uses user code context"]
+    },
+    turns: [
+      {
+        turn_id: 1,
+        user: "This doesn't work: fitMedia(sounds, 1, 1, 5)",
+        ai: "Use sounds[0] instead of sounds."
+      }
+    ]
+  })
+});
+
+const report = await response.json();</code></pre>
+        </div>
+      </div>
+
+      <div class="runbar">
+        <div>
+          <div class="card-title">Ready to run Behavioral QA</div>
+          <div class="hint">This standalone prototype uses rule-based scoring. Replace <code>evaluate()</code> with your Automatic RHCA API later.</div>
+        </div>
+        <div class="small-actions">
+          <button class="btn" onclick="saveWorkspace()">Save workspace</button>
+          <button class="btn btn-primary" onclick="runEvaluation()">Run Behavioral QA</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="stack">
+      <div class="card score-card">
+        <div class="card-body">
+          <div class="score-layout">
+            <div class="score-ring" id="scoreRing">
+              <div class="score-inner">
+                <div class="score-number" id="scoreNumber">—</div>
+                <div class="score-label">Behavior Score</div>
+              </div>
+            </div>
+            <div>
+              <div class="release-pill" id="releasePill">No run yet</div>
+              <div class="release-title" id="releaseTitle">Run an evaluation to generate a release decision.</div>
+              <div class="release-desc" id="releaseDesc">The Developer Console will summarize RHCA scores, detected failures, severity, evidence, and suggested fixes for your AI build.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Run Summary</div>
+            <div class="card-desc">High-level metadata and release gate for this evaluation run.</div>
+          </div>
+          <span class="badge neutral" id="runStatusBadge">Not evaluated</span>
+        </div>
+        <div class="card-body" id="summaryBox">
+          <div class="empty">No run yet. Add a conversation, configure domain calibration, then click Run Behavioral QA.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Quality Gates</div>
+            <div class="card-desc">RHCA dimension scores are normalized into release-oriented pass/review/fail gates.</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="metric-grid" id="metricsGrid">
+            <div class="empty" style="grid-column: 1 / -1;">Quality gates will appear after evaluation.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Detected Failures</div>
+            <div class="card-desc">Each issue includes a failure code, severity, evidence, and developer action.</div>
+          </div>
+          <span class="badge neutral" id="failureCountBadge">0 failures</span>
+        </div>
+        <div class="card-body">
+          <div class="failure-list" id="failureList">
+            <div class="empty">Detected failures will appear here.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Regression Test Suggestions</div>
+            <div class="card-desc">Convert behavioral failures into future test cases.</div>
+          </div>
+        </div>
+        <div class="card-body" id="regressionBox">
+          <div class="empty">Regression suggestions will appear after evaluation.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const DOMAIN_TEMPLATES = {
+    coding: {
+      reasoning: [
+        "Explains the cause of an error before proposing a fix",
+        "Connects the fix to code behavior or API requirements",
+        "Avoids unexplained code dumps"
+      ],
+      helpfulness: [
+        "Provides the minimal runnable fix first",
+        "Uses correct syntax, API, and domain vocabulary",
+        "Offers a concrete next debugging step"
+      ],
+      consistency: [
+        "Does not contradict earlier advice",
+        "Maintains the same interpretation of the user's code",
+        "Keeps track of prior constraints across turns"
+      ],
+      alignment: [
+        "Adapts to learner level",
+        "Uses the user's project context instead of generic tutorial mode",
+        "Asks a targeted clarification when intent is ambiguous"
+      ]
+    },
+    learning: {
+      reasoning: [
+        "Explains why the answer makes sense",
+        "Uses age-appropriate reasoning",
+        "Makes concepts visible without overloading the learner"
+      ],
+      helpfulness: [
+        "Gives actionable hints before full answers",
+        "Supports learner agency",
+        "Provides examples matched to the learner's task"
+      ],
+      consistency: [
+        "Maintains coherent learning goals across turns",
+        "Does not switch explanation level abruptly",
+        "Avoids conflicting instructions"
+      ],
+      alignment: [
+        "Adapts to learner confusion or frustration",
+        "Responds to the learner's stated goal",
+        "Balances support with not doing the task for the learner"
+      ]
+    },
+    support: {
+      reasoning: [
+        "Explains policy or process rationale when needed",
+        "Identifies missing information",
+        "Does not invent unsupported explanations"
+      ],
+      helpfulness: [
+        "Gives the next best action",
+        "Escalates when appropriate",
+        "Uses accurate product or account context"
+      ],
+      consistency: [
+        "Does not contradict company policy",
+        "Keeps facts consistent across the thread",
+        "Maintains stable commitments"
+      ],
+      alignment: [
+        "Responds to user urgency",
+        "Matches tone to customer emotion",
+        "Uses available account or order context"
+      ]
+    },
+    healthcare: {
+      reasoning: [
+        "Explains uncertainty clearly",
+        "Distinguishes general information from diagnosis",
+        "Avoids unsupported causal claims"
+      ],
+      helpfulness: [
+        "Encourages appropriate professional care when needed",
+        "Provides safe next steps",
+        "Avoids overconfident medical advice"
+      ],
+      consistency: [
+        "Does not contradict prior safety guidance",
+        "Keeps risk framing consistent",
+        "Maintains boundaries across turns"
+      ],
+      alignment: [
+        "Adapts to user concern level",
+        "Avoids dismissive tone",
+        "Uses the user's stated context without over-inference"
+      ]
+    },
+    custom: {
+      reasoning: ["Define domain-specific reasoning criteria here"],
+      helpfulness: ["Define domain-specific helpfulness criteria here"],
+      consistency: ["Define domain-specific consistency criteria here"],
+      alignment: ["Define domain-specific context alignment criteria here"]
+    }
+  };
+
+  const CODE_SNIPPETS = {
+    jsCode: `const response = await fetch("/api/rhca/evaluate", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    metadata: {
+      project: "EarSketch AI",
+      environment: "Staging",
+      model: "gemini-rag",
+      build: "v0.18",
+      test_suite: "coding-debugging-regression"
+    },
+    calibration: {
+      domain: "coding",
+      reasoning: ["explains error cause", "connects fix to code behavior"],
+      helpfulness: ["provides minimal runnable fix", "uses correct API"],
+      consistency: ["does not contradict earlier turns"],
+      context_alignment: ["adapts to learner level", "uses user code context"]
+    },
+    turns: [
+      {
+        turn_id: 1,
+        user: "This doesn't work: fitMedia(sounds, 1, 1, 5)",
+        ai: "Use sounds[0] instead of sounds."
+      }
+    ]
+  })
+});
+
+const report = await response.json();`,
+    curlCode: `curl -X POST https://api.deeproject.ai/v1/evaluate \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer $DEEPROJECT_API_KEY" \\
+  -d '{
+    "metadata": {
+      "project": "EarSketch AI",
+      "environment": "Staging",
+      "model": "gemini-rag",
+      "build": "v0.18"
+    },
+    "calibration": {
+      "domain": "coding",
+      "reasoning": ["explains error cause"],
+      "helpfulness": ["provides minimal runnable fix"]
+    },
+    "turns": [
+      {
+        "turn_id": 1,
+        "user": "This does not work: fitMedia(sounds,1,1,5)",
+        "ai": "Use sounds[0] instead of sounds."
+      }
+    ]
+  }'`,
+    csvCode: `case_id,scenario,turn_id,user_message,ai_response,model,build,domain,expected_goal
+debug_001,debugging,1,"This does not work: fitMedia(sounds,1,1,5)","Use sounds[0] instead of sounds.",gemini-rag,v0.18,coding,"Student fixes the error"
+debug_001,debugging,2,"Why does sounds not work?","fitMedia expects one sound constant, not a list.",gemini-rag,v0.18,coding,"Student understands the cause"`
+  };
+
+  let lastReport = null;
+
+  function qs(id) { return document.getElementById(id); }
+
+  function showToast(message) {
+    const toast = qs("toast");
+    toast.textContent = message;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2600);
+  }
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function linesToText(lines) { return lines.join("\n"); }
+
+  function textToLines(text) {
+    return String(text || "")
+      .split("\n")
+      .map(s => s.trim())
+      .filter(Boolean);
+  }
+
+  function switchInputPanel(tab) {
+    document.querySelectorAll(".tabs .tab[data-panel]").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".input-panel").forEach(p => p.classList.remove("active"));
+    tab.classList.add("active");
+    qs(tab.dataset.panel).classList.add("active");
+  }
+
+  function switchCode(tab) {
+    document.querySelectorAll(".code-tabs .tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    qs("codeBlock").innerHTML = `<code>${escapeHtml(CODE_SNIPPETS[tab.dataset.code])}</code>`;
+  }
+
+  function addTurn(user = "", ai = "") {
+    const container = qs("turns");
+    const turn = document.createElement("div");
+    turn.className = "turn";
+    turn.innerHTML = `
+      <div class="turn-index">T${container.children.length + 1}</div>
+      <div class="field">
+        <label>User</label>
+        <textarea class="user-text" spellcheck="false">${escapeHtml(user)}</textarea>
+      </div>
+      <div class="field">
+        <label>AI Response</label>
+        <textarea class="ai-text" spellcheck="false">${escapeHtml(ai)}</textarea>
+      </div>
+      <button class="icon-btn" title="Remove turn" onclick="removeTurn(this)">×</button>
+    `;
+    container.appendChild(turn);
+    renumberTurns();
+  }
+
+  function removeTurn(btn) {
+    if (qs("turns").children.length <= 1) {
+      showToast("At least one turn is required.");
+      return;
+    }
+    btn.closest(".turn").remove();
+    renumberTurns();
+  }
+
+  function renumberTurns() {
+    [...document.querySelectorAll(".turn")].forEach((turn, i) => {
+      turn.querySelector(".turn-index").textContent = `T${i + 1}`;
+    });
+  }
+
+  function clearTurns() {
+    qs("turns").innerHTML = "";
+    addTurn();
+  }
+
+  function getTurns() {
+    return [...document.querySelectorAll(".turn")].map((turn, index) => ({
+      turn_id: index + 1,
+      user: turn.querySelector(".user-text").value.trim(),
+      ai: turn.querySelector(".ai-text").value.trim()
+    })).filter(t => t.user || t.ai);
+  }
+
+  function setTurns(turns) {
+    qs("turns").innerHTML = "";
+    turns.forEach(t => addTurn(t.user || t.user_message || "", t.ai || t.ai_response || ""));
+    if (!turns.length) addTurn();
+  }
+
+  function getMetadata() {
+    return {
+      project: qs("project").value.trim(),
+      environment: qs("environment").value,
+      model: qs("model").value.trim(),
+      build: qs("build").value.trim(),
+      test_suite: qs("suite").value.trim(),
+      release_threshold: qs("threshold").value
+    };
+  }
+
+  function getCalibration() {
+    return {
+      domain: qs("domainTemplate").value,
+      domain_notes: qs("domainNotes").value.trim(),
+      reasoning: textToLines(qs("subReasoning").value),
+      helpfulness: textToLines(qs("subHelpfulness").value),
+      consistency: textToLines(qs("subConsistency").value),
+      context_alignment: textToLines(qs("subAlignment").value),
+      weights: {
+        reasoning: Number(qs("wReasoning").value),
+        helpfulness: Number(qs("wHelpfulness").value),
+        consistency: Number(qs("wConsistency").value),
+        context_alignment: Number(qs("wAlignment").value)
+      }
+    };
+  }
+
+  function applyDomainTemplate(domain) {
+    const template = DOMAIN_TEMPLATES[domain] || DOMAIN_TEMPLATES.custom;
+    qs("subReasoning").value = linesToText(template.reasoning);
+    qs("subHelpfulness").value = linesToText(template.helpfulness);
+    qs("subConsistency").value = linesToText(template.consistency);
+    qs("subAlignment").value = linesToText(template.alignment);
+
+    const notes = {
+      coding: "Middle/high school coding help in EarSketch",
+      learning: "Tutoring or learning assistant behavior",
+      support: "Customer support assistant with policy constraints",
+      healthcare: "General healthcare information assistant with safety boundaries",
+      custom: "Define the product context here"
+    };
+    qs("domainNotes").value = notes[domain] || notes.custom;
+  }
+
+  function syncWeights() {
+    ["Reasoning", "Helpfulness", "Consistency", "Alignment"].forEach(name => {
+      qs(`w${name}Val`).textContent = qs(`w${name}`).value;
+    });
+  }
+
+  function parseCsv(text) {
+    const rows = [];
+    let row = [];
+    let value = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      const next = text[i + 1];
+
+      if (char === '"' && inQuotes && next === '"') {
+        value += '"';
+        i++;
+      } else if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === "," && !inQuotes) {
+        row.push(value);
+        value = "";
+      } else if ((char === "\n" || char === "\r") && !inQuotes) {
+        if (char === "\r" && next === "\n") i++;
+        row.push(value);
+        if (row.some(cell => cell.trim() !== "")) rows.push(row);
+        row = [];
+        value = "";
+      } else {
+        value += char;
+      }
+    }
+
+    row.push(value);
+    if (row.some(cell => cell.trim() !== "")) rows.push(row);
+    if (!rows.length) return [];
+
+    const headers = rows[0].map(h => h.trim());
+    return rows.slice(1).map(r => {
+      const item = {};
+      headers.forEach((h, i) => item[h] = (r[i] || "").trim());
+      return item;
+    });
+  }
+
+  function importCsvText() {
+    try {
+      const rows = parseCsv(qs("csvText").value);
+      const turns = rows.map((r, i) => ({
+        turn_id: Number(r.turn_id) || i + 1,
+        user: r.user_message || r.user || "",
+        ai: r.ai_response || r.ai || ""
+      })).filter(t => t.user || t.ai);
+
+      if (!turns.length) throw new Error("No valid turns found. Required columns: user_message, ai_response.");
+
+      const first = rows[0] || {};
+      if (first.model) qs("model").value = first.model;
+      if (first.build) qs("build").value = first.build;
+      if (first.scenario) qs("suite").value = first.scenario;
+      if (first.domain) {
+        qs("domainTemplate").value = DOMAIN_TEMPLATES[first.domain] ? first.domain : "custom";
+        applyDomainTemplate(qs("domainTemplate").value);
+      }
+
+      setTurns(turns);
+      showToast(`Imported ${turns.length} turns from CSV.`);
+    } catch (err) {
+      showToast(err.message);
+    }
+  }
+
+  function handleCsvFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      qs("csvText").value = reader.result;
+      importCsvText();
+    };
+    reader.readAsText(file);
+  }
+
+  function downloadCsvTemplate() {
+    const csv = CODE_SNIPPETS.csvCode;
+    downloadText("deeproject-template.csv", csv, "text/csv");
+  }
+
+  function fillJsonExample() {
+    const payload = {
+      metadata: getMetadata(),
+      calibration: getCalibration(),
+      turns: getTurns()
+    };
+    qs("jsonText").value = JSON.stringify(payload, null, 2);
+  }
+
+  function importJsonText() {
+    try {
+      const payload = JSON.parse(qs("jsonText").value);
+      if (payload.metadata) {
+        if (payload.metadata.project) qs("project").value = payload.metadata.project;
+        if (payload.metadata.environment) qs("environment").value = payload.metadata.environment;
+        if (payload.metadata.model) qs("model").value = payload.metadata.model;
+        if (payload.metadata.build) qs("build").value = payload.metadata.build;
+        if (payload.metadata.test_suite) qs("suite").value = payload.metadata.test_suite;
+      }
+      if (payload.calibration) {
+        if (payload.calibration.domain && DOMAIN_TEMPLATES[payload.calibration.domain]) {
+          qs("domainTemplate").value = payload.calibration.domain;
+        }
+        qs("subReasoning").value = linesToText(payload.calibration.reasoning || []);
+        qs("subHelpfulness").value = linesToText(payload.calibration.helpfulness || []);
+        qs("subConsistency").value = linesToText(payload.calibration.consistency || []);
+        qs("subAlignment").value = linesToText(payload.calibration.context_alignment || payload.calibration.alignment || []);
+      }
+      setTurns(payload.turns || []);
+      showToast("Imported JSON trace.");
+    } catch (err) {
+      showToast("Invalid JSON trace.");
+    }
+  }
+
+  function evaluate(turns, calibration, metadata) {
+    const failures = [];
+    const counts = { reasoning: 0, helpfulness: 0, consistency: 0, context_alignment: 0 };
+    const dimensionHits = { reasoning: [], helpfulness: [], consistency: [], context_alignment: [] };
+
+    const addFailure = (dimension, turn_id, code, title, severity, evidence, fix, regression) => {
+      counts[dimension] += severity === "high" ? 2 : 1;
+      dimensionHits[dimension].push(code);
+      failures.push({ dimension, turn_id, code, title, severity, evidence, fix, regression });
+    };
+
+    const avgAiLength = turns.reduce((sum, t) => sum + (t.ai || "").length, 0) / Math.max(turns.length, 1);
+    const veryLongTurns = turns.filter(t => (t.ai || "").length > 900);
+    const hasGenericTutorial = turns.some(t => /quick challenge|full example code|how to create a list|why use a list/i.test(t.ai || ""));
+
+    if (avgAiLength > 760 || veryLongTurns.length >= 2) {
+      addFailure(
+        "helpfulness",
+        "cross-turn",
+        "DP-H-VERBOSE",
+        "Overly verbose guidance",
+        "medium",
+        "The assistant repeatedly gives long explanations, which may hide the immediate fix developers expect the model to provide.",
+        "Add a prompt rule: when the user reports a coding issue, start with a one-line fix before optional explanation.",
+        "Create a regression case where the expected answer starts with the minimal fix and keeps the first response under 120 words."
+      );
+      addFailure(
+        "context_alignment",
+        "cross-turn",
+        "DP-A-TUTORIAL-DRIFT",
+        "Generic tutorial drift",
+        hasGenericTutorial ? "high" : "medium",
+        "The assistant moves into tutorial mode instead of staying focused on the user's current debugging context.",
+        "Split response policy into: quick fix, why it happens, ask whether the user wants a deeper explanation.",
+        "Add a test that fails when the assistant gives broad tutorials after a user asks for a concrete error fix."
+      );
+    }
+
+    turns.forEach((t, index) => {
+      const user = (t.user || "").toLowerCase();
+      const ai = (t.ai || "").toLowerCase();
+      const turnId = t.turn_id || index + 1;
+
+      const userAsksWhy = /why|explain|error|doesn't work|does not work|not work|wrong|fail|bug/.test(user);
+      const aiExplainsReason = /because|the reason|expects|this happens|error occurs|fails because|not the whole list|requires/.test(ai);
+      const aiGivesFix = /use |change |try |replace |fix|should|fitmedia\(|sounds\[/.test(ai);
+      const asksSimpler = /simpler|beginner|still don't get|confusing|confused/.test(user);
+      const abstractLanguage = /programming construct|iterable|enumerable|syntax is|abstraction/.test(ai);
+      const mentionsErrorButNoMinimalFix = userAsksWhy && !/sounds\[0\]|select one|single sound|one sound/.test(ai) && /fitmedia\(sounds/.test(user);
+
+      if (userAsksWhy && !aiExplainsReason) {
+        addFailure(
+          "reasoning",
+          turnId,
+          "DP-R-MISSING-CAUSE",
+          "Missing error cause",
+          "high",
+          "The user asks about an error or failure, but the assistant does not clearly explain why the issue occurred.",
+          "Require the first debugging response to state the cause in one sentence before giving a fix.",
+          "Given a user asks why code fails, expected output must include a causal explanation."
+        );
+      }
+
+      if (userAsksWhy && !aiGivesFix) {
+        addFailure(
+          "helpfulness",
+          turnId,
+          "DP-H-NO-ACTION",
+          "No actionable next step",
+          "high",
+          "The response does not provide a concrete correction or next debugging step.",
+          "Add a response contract: cause + minimal fix + one validation step.",
+          "Expected response includes a runnable or directly editable correction."
+        );
+      }
+
+      if (mentionsErrorButNoMinimalFix) {
+        addFailure(
+          "helpfulness",
+          turnId,
+          "DP-H-MINIMAL-FIX-MISSING",
+          "Missing minimal fix",
+          "high",
+          "For this EarSketch error, the response should directly say to use sounds[0] or another indexed sound constant.",
+          "Prioritize the minimal code change: fitMedia(sounds[0], 1, 1, 5).",
+          "If user passes a list to fitMedia, expected response identifies that fitMedia needs a single sound constant."
+        );
+      }
+
+      if (asksSimpler && ((t.ai || "").length > 220 || abstractLanguage)) {
+        addFailure(
+          "context_alignment",
+          turnId,
+          "DP-A-LEVEL-MISMATCH",
+          "Level mismatch",
+          "medium",
+          "The user asks for simpler help, but the assistant continues using abstract or verbose language.",
+          "Detect simplification requests and switch to one concrete analogy plus one example.",
+          "When user asks for simpler explanation, response should be shorter and avoid jargon."
+        );
+      }
+
+      if (index > 0) {
+        const prevAi = (turns[index - 1].ai || "").toLowerCase();
+        if (/use split\(\)/.test(prevAi) && /split\(' '\)/.test(ai)) {
+          addFailure(
+            "consistency",
+            turnId,
+            "DP-C-CONTRADICTS-PREVIOUS",
+            "Contradictory implementation detail",
+            "high",
+            "The assistant first suggests split(), then gives split(' '), which behaves differently with extra spaces.",
+            "Add consistency checks for follow-up turns and prefer the implementation aligned with the prior explanation.",
+            "Regression case: extra spaces in word counting should use text.split(), not text.split(' ')."
+          );
+        }
+      }
+    });
+
+    const raw = {
+      reasoning: Math.max(1, 3 - counts.reasoning),
+      helpfulness: Math.max(1, 3 - counts.helpfulness),
+      consistency: Math.max(1, 3 - counts.consistency),
+      context_alignment: Math.max(1, 3 - counts.context_alignment)
+    };
+
+    const weights = calibration.weights;
+    const totalWeight = Object.values(weights).reduce((a, b) => a + b, 0) || 100;
+    const weighted =
+      raw.reasoning / 3 * (weights.reasoning / totalWeight) +
+      raw.helpfulness / 3 * (weights.helpfulness / totalWeight) +
+      raw.consistency / 3 * (weights.consistency / totalWeight) +
+      raw.context_alignment / 3 * (weights.context_alignment / totalWeight);
+    const behaviorScore = Math.round(weighted * 100);
+
+    const high = failures.filter(f => f.severity === "high").length;
+    const medium = failures.filter(f => f.severity === "medium").length;
+    let release = "approved";
+    let title = "Approved with monitoring";
+    let desc = "No blocking behavioral issues were detected. Monitor future production traces for drift.";
+
+    if (metadata.release_threshold === "strict" && high > 0) {
+      release = "blocked";
+      title = "Block release";
+      desc = "Strict gate is enabled and at least one high-severity behavioral failure was detected.";
+    } else if (behaviorScore < 62 || high >= 2) {
+      release = "blocked";
+      title = "Block release";
+      desc = "The build has multiple high-severity behavioral issues or a low behavior score.";
+    } else if (behaviorScore < 82 || high > 0 || medium > 0) {
+      release = "review";
+      title = "Human review recommended";
+      desc = "The build may be deployable after prompt or policy changes, but should not ship without review.";
+    }
+
+    return {
+      metadata,
+      calibration,
+      summary: {
+        turns: turns.length,
+        behavior_score: behaviorScore,
+        release_gate: release,
+        release_title: title,
+        release_description: desc,
+        failures_total: failures.length,
+        failures_high: high,
+        failures_medium: medium
+      },
+      scores: raw,
+      dimension_hits: dimensionHits,
+      failures,
+      regression_tests: [...new Set(failures.map(f => f.regression))]
+    };
+  }
+
+  function runEvaluation() {
+    const turns = getTurns();
+    if (!turns.length || turns.every(t => !t.user && !t.ai)) {
+      showToast("Add at least one user/AI turn before running QA.");
+      return;
+    }
+    const report = evaluate(turns, getCalibration(), getMetadata());
+    lastReport = report;
+    renderReport(report);
+    saveWorkspace(false);
+    showToast("Behavioral QA report generated.");
+  }
+
+  function renderReport(report) {
+    const score = report.summary.behavior_score;
+    qs("scoreNumber").textContent = score;
+    qs("scoreRing").style.background = `conic-gradient(var(--accent) ${score * 3.6}deg, rgba(255,255,255,0.16) 0deg)`;
+
+    const releaseClass = report.summary.release_gate === "blocked" ? "bad" : report.summary.release_gate === "review" ? "warn" : "good";
+    const releaseText = report.summary.release_gate === "blocked" ? "Blocked" : report.summary.release_gate === "review" ? "Needs review" : "Approved";
+    qs("releasePill").textContent = releaseText;
+    qs("releaseTitle").textContent = report.summary.release_title;
+    qs("releaseDesc").textContent = report.summary.release_description;
+    qs("runStatusBadge").className = `badge ${releaseClass}`;
+    qs("runStatusBadge").textContent = releaseText;
+
+    qs("summaryBox").innerHTML = `
+      <div class="kv"><div class="kv-key">Project</div><div class="kv-value">${escapeHtml(report.metadata.project)}</div></div>
+      <div class="kv"><div class="kv-key">Environment</div><div class="kv-value">${escapeHtml(report.metadata.environment)}</div></div>
+      <div class="kv"><div class="kv-key">Model / Build</div><div class="kv-value">${escapeHtml(report.metadata.model)} · ${escapeHtml(report.metadata.build)}</div></div>
+      <div class="kv"><div class="kv-key">Test suite</div><div class="kv-value">${escapeHtml(report.metadata.test_suite)}</div></div>
+      <div class="kv"><div class="kv-key">Domain</div><div class="kv-value">${escapeHtml(report.calibration.domain)} · ${escapeHtml(report.calibration.domain_notes)}</div></div>
+      <div class="kv"><div class="kv-key">Evaluated turns</div><div class="kv-value">${report.summary.turns}</div></div>
+      <div class="kv"><div class="kv-key">Failures</div><div class="kv-value">${report.summary.failures_total} total · ${report.summary.failures_high} high · ${report.summary.failures_medium} medium</div></div>
+    `;
+
+    renderMetrics(report);
+    renderFailures(report);
+    renderRegressions(report);
+  }
+
+  function metricLabel(score) {
+    if (score >= 3) return { text: "PASS", cls: "good" };
+    if (score === 2) return { text: "REVIEW", cls: "warn" };
+    return { text: "FAIL", cls: "bad" };
+  }
+
+  function renderMetrics(report) {
+    const map = [
+      ["reasoning", "Reasoning"],
+      ["helpfulness", "Helpfulness"],
+      ["consistency", "Consistency"],
+      ["context_alignment", "Context Alignment"]
+    ];
+    qs("metricsGrid").innerHTML = map.map(([key, label]) => {
+      const score = report.scores[key];
+      const badge = metricLabel(score);
+      const pct = Math.round(score / 3 * 100);
+      const hits = report.dimension_hits[key] || [];
+      return `
+        <div class="metric-card">
+          <div class="metric-top">
+            <div>
+              <div class="metric-name">${label}</div>
+              <div class="metric-score">${score}/3</div>
+            </div>
+            <span class="badge ${badge.cls}">${badge.text}</span>
+          </div>
+          <div class="bar"><div class="bar-fill" style="width:${pct}%"></div></div>
+          <div class="hint" style="margin-top: 10px;">${hits.length ? escapeHtml([...new Set(hits)].join(", ")) : "No major issue detected."}</div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function renderFailures(report) {
+    qs("failureCountBadge").className = report.failures.length ? "badge warn" : "badge good";
+    qs("failureCountBadge").textContent = `${report.failures.length} failure${report.failures.length === 1 ? "" : "s"}`;
+
+    if (!report.failures.length) {
+      qs("failureList").innerHTML = `<div class="empty">No behavioral failures detected by this prototype evaluator.</div>`;
+      return;
+    }
+
+    qs("failureList").innerHTML = report.failures.map(f => {
+      const cls = f.severity === "high" ? "bad" : "warn";
+      return `
+        <div class="failure">
+          <div class="failure-head">
+            <div>
+              <div class="failure-title">${escapeHtml(f.title)}</div>
+              <div class="failure-code">${escapeHtml(f.code)} · ${escapeHtml(f.dimension)} · Turn ${escapeHtml(f.turn_id)}</div>
+            </div>
+            <span class="badge ${cls}">${escapeHtml(f.severity.toUpperCase())}</span>
+          </div>
+          <div class="failure-body">
+            <div class="mini-box">
+              <div class="mini-label">Evidence</div>
+              <div class="mini-text">${escapeHtml(f.evidence)}</div>
+            </div>
+            <div class="mini-box">
+              <div class="mini-label">Developer action</div>
+              <div class="mini-text">${escapeHtml(f.fix)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function renderRegressions(report) {
+    if (!report.regression_tests.length) {
+      qs("regressionBox").innerHTML = `<div class="empty">No regression tests suggested.</div>`;
+      return;
+    }
+
+    qs("regressionBox").innerHTML = report.regression_tests.map((test, i) => `
+      <div class="action-item" style="padding: 12px 0; border-bottom: 1px solid var(--border);">
+        <div class="turn-ref" style="color: var(--primary); font-weight: 800; font-size: 12px; margin-bottom: 5px;">Regression ${i + 1}</div>
+        <div class="mini-text">${escapeHtml(test)}</div>
+      </div>
+    `).join("");
+  }
+
+  function saveWorkspace(show = true) {
+    const payload = {
+      metadata: getMetadata(),
+      calibration: getCalibration(),
+      turns: getTurns(),
+      lastReport,
+      saved_at: new Date().toISOString()
+    };
+    localStorage.setItem("deeproject_developer_workspace", JSON.stringify(payload));
+    localStorage.setItem("deeproject_workspace", JSON.stringify({ turns: payload.turns, scenario: payload.metadata.test_suite }));
+    if (show) showToast("Workspace saved locally.");
+  }
+
+  function loadWorkspace() {
+    try {
+      const raw = localStorage.getItem("deeproject_developer_workspace") || localStorage.getItem("deeproject_workspace");
+      if (!raw) return false;
+      const payload = JSON.parse(raw);
+      if (payload.metadata) {
+        if (payload.metadata.project) qs("project").value = payload.metadata.project;
+        if (payload.metadata.environment) qs("environment").value = payload.metadata.environment;
+        if (payload.metadata.model) qs("model").value = payload.metadata.model;
+        if (payload.metadata.build) qs("build").value = payload.metadata.build;
+        if (payload.metadata.test_suite) qs("suite").value = payload.metadata.test_suite;
+      }
+      if (payload.calibration) {
+        if (payload.calibration.domain && DOMAIN_TEMPLATES[payload.calibration.domain]) qs("domainTemplate").value = payload.calibration.domain;
+        qs("subReasoning").value = linesToText(payload.calibration.reasoning || []);
+        qs("subHelpfulness").value = linesToText(payload.calibration.helpfulness || []);
+        qs("subConsistency").value = linesToText(payload.calibration.consistency || []);
+        qs("subAlignment").value = linesToText(payload.calibration.context_alignment || []);
+      }
+      if (payload.turns) setTurns(payload.turns);
+      if (payload.lastReport) {
+        lastReport = payload.lastReport;
+        renderReport(lastReport);
+      }
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function exportReport() {
+    if (!lastReport) runEvaluation();
+    const payload = lastReport || { metadata: getMetadata(), calibration: getCalibration(), turns: getTurns() };
+    downloadText(`deeproject-report-${Date.now()}.json`, JSON.stringify(payload, null, 2), "application/json");
+  }
+
+  function downloadText(filename, content, mime) {
+    const blob = new Blob([content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function loadSample(type = "coding") {
+    if (type === "coding") {
+      qs("project").value = "EarSketch AI";
+      qs("environment").value = "Staging";
+      qs("model").value = "gemini-rag";
+      qs("build").value = "v0.18";
+      qs("suite").value = "coding-debugging-regression";
+      qs("domainTemplate").value = "coding";
+      applyDomainTemplate("coding");
+      setTurns([
+        {
+          user: "How do I use a list in Python?",
+          ai: "In music programming, a list is like a sequence of notes. You can create one with brackets, access items by index, append values, and loop through it. For example: melody = [\"C4\", \"E4\", \"G4\"]. Python starts counting at 0. You can use melody[0] to get the first note. You can also append notes and use a loop to play every note. Quick Challenge: Try creating a durations list like [1, 0.5, 0.5, 2]."
+        },
+        {
+          user: "How do I use fitMedia with this sound list?",
+          ai: "Great question! Create a list of sound constants, then access one sound by index inside fitMedia. Example: sounds = [HOUSE_DEEP_CRYSTALCHORD_001, HOUSE_MAIN_BEAT_002]. Then use fitMedia(sounds[0], 1, 1, 5). This is useful because lists keep sounds organized and can later be used with loops."
+        },
+        {
+          user: "This doesn't work in my code: fitMedia(sounds, 1, 1, 5). It gives an error.",
+          ai: "The reason is that fitMedia expects a single sound constant as its first argument, but sounds is the entire list. Use fitMedia(sounds[0], 1, 1, 5) if you want the first sound. If you want every sound, use a loop and pass each sound one at a time."
+        }
+      ]);
+      showToast("Loaded coding sample.");
+    }
+  }
+
+  window.onload = () => {
+    applyDomainTemplate("coding");
+    syncWeights();
+    const loaded = loadWorkspace();
+    if (!loaded) loadSample("coding");
+  };
+</script>
+</body>
+</html>
