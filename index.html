@@ -3,22 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Deeproject</title>
+  <title>DeeProject</title>
 
   <style>
+    :root {
+      --bg: #0b0f1a;
+      --card: rgba(255, 255, 255, 0.045);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --soft: #6b7280;
+      --primary: #7c3aed;
+      --primary-2: #6366f1;
+      --accent: #22d3ee;
+      --danger: #fb7185;
+      --success: #34d399;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #0b0f1a;
-      color: #e5e7eb;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(124, 58, 237, 0.22), transparent 36%),
+        radial-gradient(circle at top right, rgba(34, 211, 238, 0.12), transparent 32%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
     }
 
     .navbar {
       width: 100%;
-      padding: 20px 40px;
+      padding: 22px 48px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -26,131 +45,273 @@
 
     .logo {
       font-size: 18px;
-      letter-spacing: 1px;
-      color: #9ca3af;
+      letter-spacing: 1.2px;
+      color: #e5e7eb;
+      font-weight: 700;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .link {
       font-size: 14px;
-      color: #9ca3af;
+      color: var(--muted);
       text-decoration: none;
     }
 
     .link:hover {
-      color: #6366f1;
-    }
-
-    .btn {
-      border: 1px solid #374151;
-      padding: 10px 18px;
-      border-radius: 999px;
-      background: transparent;
-      color: #e5e7eb;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn:hover {
-      border-color: #6366f1;
-      color: #6366f1;
-    }
-
-    .primary {
-      background: #6366f1;
-      border: none;
       color: white;
     }
 
+    .btn {
+      border: 1px solid rgba(255,255,255,0.16);
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.035);
+      color: #e5e7eb;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .btn:hover {
+      border-color: rgba(124, 58, 237, 0.8);
+      color: white;
+      transform: translateY(-1px);
+      background: rgba(124, 58, 237, 0.12);
+    }
+
+    .primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      border: none;
+      color: white;
+      box-shadow: 0 18px 45px rgba(99, 102, 241, 0.28);
+    }
+
     .primary:hover {
-      background: #4f46e5;
+      background: linear-gradient(135deg, #8b5cf6, #4f46e5);
+      color: white;
+    }
+
+    .developer {
+      border-color: rgba(34, 211, 238, 0.5);
+      color: #cffafe;
+      background: rgba(34, 211, 238, 0.08);
+    }
+
+    .developer:hover {
+      border-color: var(--accent);
+      background: rgba(34, 211, 238, 0.14);
+      color: white;
     }
 
     .hero {
       text-align: center;
-      margin-top: 120px;
-      max-width: 800px;
+      margin: 110px auto 0;
+      max-width: 920px;
+      padding: 0 24px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.045);
+      color: #c4b5fd;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 13px;
+      margin-bottom: 22px;
     }
 
     .hero h1 {
-      font-size: 48px;
-      font-weight: 500;
-      line-height: 1.2;
-      margin-bottom: 16px;
+      font-size: clamp(42px, 7vw, 76px);
+      font-weight: 650;
+      letter-spacing: -2.4px;
+      line-height: 0.98;
+      margin: 0 0 22px;
     }
 
     .hero p {
-      color: #6b7280;
-      font-size: 18px;
-      margin-bottom: 40px;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1.6;
+      max-width: 700px;
+      margin: 0 auto 36px;
     }
 
-    .waitlist {
-      margin-top: 40px;
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
     }
 
-    .waitlist p {
-      color: #6b7280;
+    .microcopy {
+      color: var(--soft);
       font-size: 13px;
-      margin-bottom: 10px;
+      margin-top: 12px;
     }
 
     .compare {
-      margin-top: 120px;
-      width: 900px;
-      max-width: 90%;
+      margin: 120px auto 0;
+      width: 1000px;
+      max-width: calc(100% - 48px);
     }
 
     .compare-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
       text-align: left;
     }
 
     .col {
-      flex: 1;
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      border-radius: 24px;
+      padding: 28px;
+      min-height: 250px;
+      backdrop-filter: blur(14px);
     }
 
     .left {
-      opacity: 0.5;
+      opacity: 0.72;
     }
 
     .label {
       font-size: 11px;
       letter-spacing: 1px;
-      color: #6b7280;
-      margin-bottom: 8px;
+      color: var(--soft);
+      margin-bottom: 12px;
+      text-transform: uppercase;
     }
 
     .highlight {
-      color: #6366f1;
+      color: #c4b5fd;
     }
 
     h3 {
-      font-weight: 400;
-      margin-bottom: 10px;
+      font-weight: 560;
+      font-size: 24px;
+      margin: 0 0 14px;
+      letter-spacing: -0.4px;
     }
 
     .desc {
-      font-size: 14px;
-      color: #9ca3af;
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .signal-list {
+      margin-top: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .signal {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 13px;
+    }
+
+    .signal span:first-child {
+      color: #e5e7eb;
+    }
+
+    .signal span:last-child {
+      color: var(--muted);
+    }
+
+    .developer-strip {
+      margin: 70px auto 0;
+      width: 1000px;
+      max-width: calc(100% - 48px);
+      border: 1px solid rgba(34, 211, 238, 0.22);
+      background:
+        linear-gradient(135deg, rgba(34, 211, 238, 0.08), rgba(124, 58, 237, 0.08));
+      border-radius: 28px;
+      padding: 28px;
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .developer-strip h3 {
+      margin-bottom: 8px;
+    }
+
+    .developer-strip p {
+      color: var(--muted);
       line-height: 1.6;
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .waitlist {
+      margin: 70px auto 0;
+      text-align: center;
+    }
+
+    .waitlist p {
+      color: var(--soft);
+      font-size: 13px;
+      margin-bottom: 12px;
     }
 
     .footer {
-      margin-top: 120px;
+      margin: 110px 0 34px;
       text-align: center;
       font-size: 13px;
       color: #4b5563;
     }
 
     @media (max-width: 800px) {
+      .navbar {
+        padding: 20px 24px;
+        align-items: flex-start;
+        gap: 14px;
+        flex-direction: column;
+      }
+
+      .hero {
+        margin-top: 72px;
+      }
+
       .hero h1 {
-        font-size: 32px;
+        letter-spacing: -1.4px;
+      }
+
+      .hero p {
+        font-size: 17px;
       }
 
       .compare-row {
+        grid-template-columns: 1fr;
+      }
+
+      .developer-strip {
         flex-direction: column;
+        align-items: flex-start;
       }
     }
   </style>
@@ -162,34 +323,44 @@
   <div class="navbar">
     <div class="logo">DEEPROJECT</div>
 
-    <a 
-      class="link"
-      href="https://www.linkedin.com/company/109586277"
-      target="_blank"
-    >
-      Follow
-    </a>
+    <div class="nav-actions">
+      <a class="link" href="https://www.linkedin.com/company/109586277" target="_blank">
+        Follow
+      </a>
+
+      <!-- Developer-facing entry -->
+      <a class="btn developer" href="developer.html">
+        Developer View
+      </a>
+    </div>
   </div>
 
   <!-- HERO -->
   <section class="hero">
+    <div class="badge">
+      Behavioral QA for human-facing AI agents
+    </div>
+
     <h1>Understand how AI systems behave</h1>
-    <p>Not just what they output.</p>
 
-    <button class="btn primary" onclick="goDemo()">
-      Try Demo
-    </button>
+    <p>
+      DeeProject helps teams move beyond output scoring by detecting behavioral failures
+      across multi-turn AI interactions.
+    </p>
 
-    <!-- WAITLIST -->
-    <div class="waitlist">
-      <p>Early access</p>
-
-      <button 
-        class="btn"
-        onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSf8r22RV3nsEDcCJfg4FEkWmW9u5jpdyhQTnezBWRaA_TGIAQ/viewform', '_blank')"
-      >
-        Request Access
+    <div class="hero-actions">
+      <button class="btn primary" onclick="goDemo()">
+        Try Interactive Demo
       </button>
+
+      <!-- Main developer CTA -->
+      <button class="btn developer" onclick="goDeveloper()">
+        Open Developer Console
+      </button>
+    </div>
+
+    <div class="microcopy">
+      Demo for exploring behavior · Developer Console for QA, release gates, and regression testing
     </div>
   </section>
 
@@ -197,45 +368,107 @@
   <div class="compare">
     <div class="compare-row">
 
-      <!-- 左 -->
+      <!-- LEFT -->
       <div class="col left">
-        <div class="label">TRADITIONAL</div>
+        <div class="label">Traditional Evaluation</div>
 
         <h3>Evaluate outputs</h3>
 
         <div class="desc">
-          Measure correctness.<br>
-          Assign a score.<br><br>
+          Most evaluation workflows focus on correctness, pass/fail scores,
+          or one-shot answers.
+          <br><br>
+          They often miss how behavior changes across turns.
+        </div>
 
-          Understand nothing about how the system behaves.
+        <div class="signal-list">
+          <div class="signal">
+            <span>Correctness</span>
+            <span>Single output</span>
+          </div>
+          <div class="signal">
+            <span>LLM judge score</span>
+            <span>Limited evidence</span>
+          </div>
+          <div class="signal">
+            <span>Benchmark result</span>
+            <span>Hard to act on</span>
+          </div>
         </div>
       </div>
 
-      <!-- 右 -->
+      <!-- RIGHT -->
       <div class="col">
-        <div class="label highlight">DEEPROJECT</div>
+        <div class="label highlight">DeeProject</div>
 
         <h3>Understand failures</h3>
 
         <div class="desc">
-          Turn 2 → Adaptation failure<br>
-          Turn 3 → Repeated verbosity<br><br>
+          DeeProject identifies reasoning, helpfulness, consistency,
+          and context-alignment failures in real AI interactions.
+          <br><br>
+          See what failed, where it failed, and what developers should fix.
+        </div>
 
-          See how behavior breaks over time.
+        <div class="signal-list">
+          <div class="signal">
+            <span>Turn 2</span>
+            <span>Adaptation failure</span>
+          </div>
+          <div class="signal">
+            <span>Turn 3</span>
+            <span>Repeated verbosity</span>
+          </div>
+          <div class="signal">
+            <span>Release gate</span>
+            <span>Needs review</span>
+          </div>
         </div>
       </div>
 
     </div>
   </div>
 
+  <!-- DEVELOPER STRIP -->
+  <section class="developer-strip">
+    <div>
+      <div class="label highlight">For Developers</div>
+      <h3>Run behavioral QA before deployment</h3>
+      <p>
+        Upload conversations, calibrate domain-specific sub-dimensions,
+        inspect detected failures, and turn issues into regression tests.
+      </p>
+    </div>
+
+    <a class="btn developer" href="developer.html">
+      Go to Developer View
+    </a>
+  </section>
+
+  <!-- WAITLIST -->
+  <div class="waitlist">
+    <p>Early access</p>
+
+    <button 
+      class="btn"
+      onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSf8r22RV3nsEDcCJfg4FEkWmW9u5jpdyhQTnezBWRaA_TGIAQ/viewform', '_blank')"
+    >
+      Request Access
+    </button>
+  </div>
+
   <!-- FOOTER -->
   <div class="footer">
-    Deeproject · AI systems evaluation
+    DeeProject · Behavioral AI evaluation
   </div>
 
   <script>
     function goDemo() {
       window.location.href = "dashboard.html";
+    }
+
+    function goDeveloper() {
+      window.location.href = "developer.html";
     }
   </script>
 
