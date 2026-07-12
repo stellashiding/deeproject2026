@@ -772,6 +772,12 @@
   }
 
 </style>
+  <script>
+  if (localStorage.getItem("deeproject_logged_in") !== "true") {
+    window.location.href = "index.html";
+  }
+</script>
+  
 </head>
 <body>
 <div class="app">
