@@ -81,6 +81,7 @@
       justify-content: center;
       gap: 8px;
       font-size: 14px;
+      font-family: inherit;
     }
 
     .btn:hover {
@@ -285,6 +286,96 @@
       color: #4b5563;
     }
 
+    /* Login modal */
+    .login-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 15, 0.72);
+      backdrop-filter: blur(14px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 24px;
+    }
+
+    .login-card {
+      position: relative;
+      width: 420px;
+      max-width: 100%;
+      border: 1px solid rgba(255,255,255,0.12);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035)),
+        #0b0f1a;
+      border-radius: 28px;
+      padding: 30px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      border: none;
+      background: transparent;
+      color: #9ca3af;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .login-card h3 {
+      margin: 8px 0 10px;
+      font-size: 28px;
+    }
+
+    .login-desc {
+      color: #9ca3af;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .login-input {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: white;
+      margin-bottom: 12px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .login-input:focus {
+      outline: none;
+      border-color: #7c3aed;
+    }
+
+    .login-submit {
+      width: 100%;
+      margin-top: 4px;
+    }
+
+    .login-error {
+      color: #fb7185;
+      font-size: 13px;
+      min-height: 18px;
+      margin-top: 12px;
+    }
+
+    .access-row {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      color: #6b7280;
+      font-size: 13px;
+    }
+
     @media (max-width: 800px) {
       .navbar {
         padding: 20px 24px;
@@ -313,6 +404,11 @@
         flex-direction: column;
         align-items: flex-start;
       }
+
+      .access-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
@@ -328,10 +424,17 @@
         Follow
       </a>
 
-      <!-- Developer-facing entry -->
-      <a class="btn developer" href="developer.html">
+      <button class="btn" id="loginBtn" onclick="openLogin()">
+        Log in
+      </button>
+
+      <button class="btn" id="logoutBtn" onclick="logout()" style="display:none;">
+        Log out
+      </button>
+
+      <button class="btn developer" onclick="goDeveloper()">
         Developer View
-      </a>
+      </button>
     </div>
   </div>
 
@@ -353,7 +456,6 @@
         Try Interactive Demo
       </button>
 
-      <!-- Main developer CTA -->
       <button class="btn developer" onclick="goDeveloper()">
         Open Developer Console
       </button>
@@ -440,21 +542,48 @@
       </p>
     </div>
 
-    <a class="btn developer" href="developer.html">
+    <button class="btn developer" onclick="goDeveloper()">
       Go to Developer View
-    </a>
+    </button>
   </section>
 
   <!-- WAITLIST -->
   <div class="waitlist">
     <p>Early access</p>
 
-    <button 
-      class="btn"
-      onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSf8r22RV3nsEDcCJfg4FEkWmW9u5jpdyhQTnezBWRaA_TGIAQ/viewform', '_blank')"
-    >
+    <button class="btn" onclick="requestAccess()">
       Request Access
     </button>
+  </div>
+
+  <!-- LOGIN MODAL -->
+  <div id="loginModal" class="login-modal">
+    <div class="login-card">
+      <button class="modal-close" onclick="closeLogin()">×</button>
+
+      <div class="label highlight">DeeProject Access</div>
+      <h3>Log in to continue</h3>
+
+      <p class="login-desc">
+        Enter the access password you received after requesting early access.
+      </p>
+
+      <input id="emailInput" class="login-input" type="email" placeholder="Email" />
+      <input id="passwordInput" class="login-input" type="password" placeholder="Access password" />
+
+      <button class="btn primary login-submit" onclick="login()">
+        Log in
+      </button>
+
+      <div id="loginError" class="login-error"></div>
+
+      <div class="access-row">
+        <span>Need access?</span>
+        <button class="btn" onclick="requestAccess()">
+          Request Access
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- FOOTER -->
@@ -463,13 +592,101 @@
   </div>
 
   <script>
+    const DEMO_PASSWORD = "deeproject";
+    const ACCESS_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSf8r22RV3nsEDcCJfg4FEkWmW9u5jpdyhQTnezBWRaA_TGIAQ/viewform";
+
+    function isLoggedIn() {
+      return localStorage.getItem("deeproject_logged_in") === "true";
+    }
+
+    function updateAuthUI() {
+      const loginBtn = document.getElementById("loginBtn");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      if (!loginBtn || !logoutBtn) return;
+
+      if (isLoggedIn()) {
+        loginBtn.style.display = "none";
+        logoutBtn.style.display = "inline-flex";
+      } else {
+        loginBtn.style.display = "inline-flex";
+        logoutBtn.style.display = "none";
+      }
+    }
+
+    function openLogin() {
+      document.getElementById("loginModal").style.display = "flex";
+      document.getElementById("loginError").innerText = "";
+      setTimeout(() => {
+        document.getElementById("emailInput").focus();
+      }, 50);
+    }
+
+    function closeLogin() {
+      document.getElementById("loginModal").style.display = "none";
+    }
+
+    function login() {
+      const email = document.getElementById("emailInput").value.trim();
+      const password = document.getElementById("passwordInput").value.trim();
+      const error = document.getElementById("loginError");
+
+      if (!email) {
+        error.innerText = "Please enter an email.";
+        return;
+      }
+
+      if (password !== DEMO_PASSWORD) {
+        error.innerText = "Incorrect access password.";
+        return;
+      }
+
+      localStorage.setItem("deeproject_logged_in", "true");
+      localStorage.setItem("deeproject_user_email", email);
+
+      closeLogin();
+      updateAuthUI();
+    }
+
+    function logout() {
+      localStorage.removeItem("deeproject_logged_in");
+      localStorage.removeItem("deeproject_user_email");
+      updateAuthUI();
+    }
+
+    function requireLogin(nextPage) {
+      if (isLoggedIn()) {
+        window.location.href = nextPage;
+      } else {
+        openLogin();
+      }
+    }
+
+    function requestAccess() {
+      window.open(ACCESS_FORM_URL, "_blank");
+    }
+
     function goDemo() {
-      window.location.href = "dashboard.html";
+      requireLogin("dashboard.html");
     }
 
     function goDeveloper() {
-      window.location.href = "developer.html";
+      requireLogin("developer.html");
     }
+
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "Escape") {
+        closeLogin();
+      }
+
+      if (event.key === "Enter" && document.getElementById("loginModal").style.display === "flex") {
+        login();
+      }
+    });
+
+    window.onload = function() {
+      updateAuthUI();
+    };
   </script>
 
 </body>
